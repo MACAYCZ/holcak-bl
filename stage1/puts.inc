@@ -36,4 +36,5 @@ pute:
 	cli
 	hlt
 
-pute.str0: .asciz "Error: "
+pute.str0:
+	.asciz "Error: "

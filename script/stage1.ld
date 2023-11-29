@@ -1,4 +1,5 @@
 ENTRY(_start)
+OUTPUT_FORMAT("elf32-i386")
 
 __start = 0x0500;
 
