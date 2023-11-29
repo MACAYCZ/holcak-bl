@@ -6,9 +6,6 @@
 
 .global _start
 _start:
-	cli
-	hlt
-
-//	mov sp, 0x1000
-//	mov bp, sp
-//	jmp main16
+	mov sp, 0x1000
+	mov bp, sp
+	jmp main16
