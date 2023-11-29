@@ -11,7 +11,7 @@ if len(argv) < 3:
 with open(argv[1], "rb+") as f:
 	size = path.getsize(f"{argv[2]}/stage1/build.bin")
 	assert size == 0x0200
-	f.write(open(f"{argv[2]}/stage1/build.bin", "rb").read())
+	f.write(open(f"{argv[2]}/stage1/build.bin", "rb").read(0x0200))
 	size = path.getsize(f"{argv[2]}/stage2/build.bin")
 	assert size < 0x07EFFF
 	f.seek(0x01B0)
