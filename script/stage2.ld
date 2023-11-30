@@ -8,8 +8,13 @@ SECTIONS
 {
 	. = __start;
 
-	.entry	: {__entry_start  = .; *(.entry) }
-	.text   : {__text_start   = .; *(.text)  }
+	.text :
+	{
+		__text_start = .;
+		build/stage2/entry.asm.o(.text)
+		*(.text)
+	}
+
 	.data   : {__data_start   = .; *(.data)  }
 	.rodata : {__rodata_start = .; *(.rodata)}
 	.bss    : {__bss_start    = .; *(.bss)   }
