@@ -1,10 +1,16 @@
 #pragma once
 #include <stdarg.h>
 
-static inline void printf(const char *fmt, ...);
-static inline void vprintf(const char *fmt, va_list args);
+void printf(const char *fmt)
+{
+	*((char*)0x0B8000) = *fmt;
+}
 
-static inline void printf(const char *fmt, ...)
+/*
+void printf(const char *fmt, ...);
+void vprintf(const char *fmt, va_list args);
+
+void printf(const char *fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -12,8 +18,9 @@ static inline void printf(const char *fmt, ...)
 	va_end(args);
 }
 
-static inline void vprintf(const char *fmt, va_list args)
+void vprintf(const char *fmt, va_list args)
 {
 	(void)args;
 	*((char*)0xB8000) = fmt[0];
 }
+*/
