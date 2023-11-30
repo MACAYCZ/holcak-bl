@@ -15,9 +15,8 @@ SECTIONS
 		*(.text .text.*)
 	}
 
-	.data   : {__data_start   = .; *(.data .data.*)    }
-	.rodata : {__rodata_start = .; *(.rodata .rodata.*)}
-	.bss    : {__bss_start    = .; *(.bss .bss.*)      }
+	.data   : {__data_start   = .; *(.data .data.*) *(.bss .bss.*)}
+	.rodata : {__rodata_start = .; *(.rodata .rodata.*)           }
 
 	__end = .;
 }
