@@ -1,7 +1,15 @@
-// #include <stdnoreturn.h>
+#include <stdnoreturn.h>
+#include "console.h"
 
-_Noreturn void main16(void)
+void putc(char chr);
+
+noreturn void main16(void)
 {
-	*((char*)0x0B8000) = 'A';
+	putc('B');
 	while (1);
+}
+
+void putc(char chr)
+{
+	*((char*)0x0B8000) = chr;
 }

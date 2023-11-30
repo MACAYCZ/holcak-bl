@@ -44,6 +44,7 @@ main:
 	mov es, ax
 	mov ss, ax
 	mov sp, 0x1000
+	mov bp, sp
 
 	// Relocate to lower address
 	cld
