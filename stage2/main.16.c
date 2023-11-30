@@ -3,8 +3,6 @@
 
 noreturn void main16(void)
 {
-	char *str = "Hello, World!";
-
-	printf(str);
+	printf("Hello, World!");
 	while (1);
 }

@@ -11,13 +11,13 @@ SECTIONS
 	.text :
 	{
 		__text_start = .;
-		build/stage2/entry.asm.o(.text)
-		*(.text)
+		build/stage2/entry.asm.o(.text .text.*)
+		*(.text .text.*)
 	}
 
-	.data   : {__data_start   = .; *(.data)  }
-	.rodata : {__rodata_start = .; *(.rodata)}
-	.bss    : {__bss_start    = .; *(.bss)   }
+	.data   : {__data_start   = .; *(.data .data.*)    }
+	.rodata : {__rodata_start = .; *(.rodata .rodata.*)}
+	.bss    : {__bss_start    = .; *(.bss .bss.*)      }
 
 	__end = .;
 }

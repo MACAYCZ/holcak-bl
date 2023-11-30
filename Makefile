@@ -21,6 +21,7 @@ build/%.asm.o: %.asm
 build/%.16.c.o: %.16.c
 	@mkdir -p ${@D}
 	${CC} -Wall -Wextra -pedantic -std=gnu17 -ggdb -ffreestanding -nostartfiles -MD -fno-pie -fno-pic -nostdlib -nostdinc -c -masm=intel -m16 -I ${INCLUDE} -o $@ $<
+	${CC} -S -Wall -Wextra -pedantic -std=gnu17 -ggdb -ffreestanding -nostartfiles -MD -fno-pie -fno-pic -nostdlib -nostdinc -c -masm=intel -m16 -I ${INCLUDE} -o $(addsuffix .asm,$(basename $@)) $<	
 
 build/%.32.c.o: %.32.c
 	@mkdir -p ${@D}
