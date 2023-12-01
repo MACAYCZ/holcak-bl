@@ -1,12 +1,10 @@
-.intel_syntax noprefix
-.code16
-
-// Initializes disk
-// Parameters:
-//   dl    - Disk number
-// References:
-//   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present
-//   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=08h:_Read_Drive_Parameters
+; Initializes disk
+; Parameters:
+;   dl    - Disk number
+; References:
+;   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present
+;   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=08h:_Read_Drive_Parameters
+[bits 16]
 disk_init:
 	pushad
 	mov ah, 0x41
@@ -15,9 +13,10 @@ disk_init:
 	int 0x13
 	mov [disk_info.extensions], cx
 
+.continue:
 	mov ah, 0x08
 	int 0x13
-	jc disk_init.error
+	jc .error
 
 	inc dh
 	mov [disk_info.heads], dh
@@ -32,32 +31,34 @@ disk_init:
 	mov [disk_info.booting], dl
 	ret
 
-disk_init.error:
+.error:
 	mov al, '1'
 	jmp pute
 
-// Resets disk controller
-// Parameters:
-//   dl    - Disk number
+; Resets disk controller
+; Parameters:
+;   dl    - Disk number
+[bits 16]
 disk_reset:
 	push ax
 	xor ah, ah
 	int 0x13
-	jc disk_reset.error
+	jc .error
 	pop ax
 	ret
 
-disk_reset.error:
+.error:
 	mov al, '2'
 	jmp pute
 
-// Reads sectors from disk
-// Parameters:
-//   eax   - LBA low pointing to the beginning of the data
-//   ebx   - Address of buffer [offset 16] [segment 16]
-//   cx    - LBA high pointing to the beginning of the data
-//   si    - Number of sectors to read
-//   dl    - Disk number
+; Reads sectors from disk
+; Parameters:
+;   eax   - LBA low pointing to the beginning of the data
+;   ebx   - Address of buffer [offset 16] [segment 16]
+;   cx    - LBA high pointing to the beginning of the data
+;   si    - Number of sectors to read
+;   dl    - Disk number
+[bits 16]
 disk_read:
 	push cx
 	mov cx, [disk_info.extensions]
@@ -68,28 +69,29 @@ disk_read:
 	test cx, cx
 	jz disk_read_0x02
 
-disk_read.error:
+.error:
 	mov al, '5'
 	jmp pute
 
-// Reads sectors from disk using int 0x13, ah=0x02
-// Parameters:
-//   eax   - LBA pointing to the beginning of the data
-//   ebx   - Address of buffer [offset 16] [segment 16]
-//   si    - Number of sectors to read
-//   dl    - Disk number
-// References:
-//   https://stanislavs.org/helppc/int_13-2.html
+; Reads sectors from disk using int 0x13, ah=0x02
+; Parameters:
+;   eax   - LBA pointing to the beginning of the data
+;   ebx   - Address of buffer [offset 16] [segment 16]
+;   si    - Number of sectors to read
+;   dl    - Disk number
+; References:
+;   https://stanislavs.org/helppc/int_13-2.html
+[bits 16]
 disk_read_0x02:
 	pushad
 	push es
 
-disk_read_0x02.loop:
+.loop:
 	push eax
 	push ebx
 	push dx
 
-	// Convert LBA to CHS
+	; Convert LBA to CHS
 	xor edx, edx
 	xor ebx, ebx
 	mov bl, [disk_info.sectors]
@@ -107,7 +109,7 @@ disk_read_0x02.loop:
 	shl ah, 0x06
 	or cl, ah
 
-	// Initialize es:bx (Pointer to buffer)
+	; Initialize es:bx (Pointer to buffer)
 	mov ebx, [esp+0x02]
 	mov di, bx
 	and di, 0x0F
@@ -115,26 +117,26 @@ disk_read_0x02.loop:
 	mov es, bx
 	mov bx, di
 
-	// Initialize al (Number of sectors)
+	; Initialize al (Number of sectors)
 	mov al, 0x80
 	cmp si, 0x80
-	jge disk_read_0x02.retry
+	jge .retry
 	mov ax, si
 
-	// Restore disk number
+	; Restore disk number
 	pop di
 	xor dl, dl
 	or dx, di
 
-	// Read sectors from disk
+	; Read sectors from disk
 	mov di, 0x05
 
-disk_read_0x02.retry:
+.retry:
 	mov ah, 0x02
 	push ax
 
 	int 0x13
-	jc disk_read_0x02.error
+	jc .error
 
 	xor ecx, ecx
 	mov cl, al
@@ -145,78 +147,79 @@ disk_read_0x02.retry:
 
 	sub si, cx
 	test si, si
-	jz disk_read_0x02.done
+	jz .done
 	add eax, ecx
 	add ebx, ecx
-	jmp disk_read_0x02.loop
+	jmp .loop
 
-disk_read_0x02.error:
+.error:
 	test di, di
-	jz disk_read_0x02.fatal
+	jz .fatal
 	call disk_reset
 	dec di
 	pop ax
-	jmp disk_read_0x02.retry
+	jmp .retry
 
-disk_read_0x02.fatal:
+.fatal:
 	mov al, '3'
 	jmp pute
 
-disk_read_0x02.done:
+.done:
 	pop es
 	popad
 	ret
 
-.section .bss
-	.lcomm disk_info.extensions, 0x01
-	.lcomm disk_info.cylinders,  0x02
-	.lcomm disk_info.heads,      0x01
-	.lcomm disk_info.sectors,    0x01
-	.lcomm disk_info.booting,    0x01
-.section .text
+section .bss
+disk_info:
+	.extensions: resb 0x01
+	.cylinders:  resw 0x01
+	.heads:      resb 0x01
+	.sectors:    resb 0x01
+	.booting:    resb 0x01
+section .text
 
-// Reads sectors from disk
-// Parameters:
-//   eax   - LBA low pointing to the beginning of the data
-//   ebx   - Address of buffer [offset 16] [segment 16]
-//   cx    - LBA high pointing to the beginning of the data
-//   si    - Number of sectors to read
-//   dl    - Disk number
-// References:
-//   http://www.ctyme.com/intr/rb-0708.htm
-//   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive
+; Reads sectors from disk
+; Parameters:
+;   eax   - LBA low pointing to the beginning of the data
+;   ebx   - Address of buffer [offset 16] [segment 16]
+;   cx    - LBA high pointing to the beginning of the data
+;   si    - Number of sectors to read
+;   dl    - Disk number
+; References:
+;   http://www.ctyme.com/intr/rb-0708.htm
+;   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive
+[bits 16]
 disk_read_0x42:
 	pusha
 
-	movb [disk_packet.size],     0x10
-	movb [disk_packet.reserved], 0x00
-	mov  [disk_packet.sectors],  si
-	mov  [disk_packet.buffer],   ebx
-	mov  [disk_packet.lba.lo],   eax
-	mov  [disk_packet.lba.hi],   cx
+	mov byte [disk_packet.size], 0x10
+	mov byte [disk_packet.reserved], 0x00
+	mov word [disk_packet.sectors], si
+	mov dword [disk_packet.buffer], ebx
+	mov dword [disk_packet.lba_lo], eax
+	mov word [disk_packet.lba_hi], cx
 
 	xor cx, cx
-	mov [disk_packet.lba.hi+0x02], cx
+	mov [disk_packet.lba_hi+0x02], cx
 
-	mov si, offset disk_packet
+	mov si, disk_packet
 	mov ah, 0x42
 	int 0x13
-	jc disk_read_0x42.error
+	jc .error
 
 	popa
 	ret
 
-disk_read_0x42.error:
+.error:
 	mov al, '4'
 	jmp pute
 
-.section .bss
-	disk_packet:
-	disk_packet.size:     .space  0x01
-	disk_packet.reserved: .space  0x01
-	disk_packet.sectors:  .space  0x02
-	disk_packet.buffer:   .space  0x04
-	disk_packet.lba.lo:   .space  0x04
-	disk_packet.lba.hi:   .space  0x04
-	disk_packet_size = . - disk_packet
-.section .text
+section .bss
+disk_packet:
+	.size:     resb 0x01
+	.reserved: resb 0x01
+	.sectors:  resw 0x01
+	.buffer:   resd 0x01
+	.lba_lo:   resd 0x01
+	.lba_hi:   resd 0x01
+section .text

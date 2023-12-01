@@ -1,96 +1,98 @@
-.intel_syntax noprefix
-.code16
+[org 0x0500]
+[bits 16]
 
-.section .text
-.global _start
+jmp main
+times 0x03-($-$$) db 0x00
 
-_start:
-	jmp main
+; BIOS Parameter Block is needed because some bioses are overwriting this section
+; References:	
+;   https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB
+[bits 16]
+bpb:
+	.oem_id:               db "HOLCAK  "
+	.bytes_per_sector:     dw 0x0200
+	.sectors_per_cluster:  db 0x00
+	.reserved_sectors:     dw 0x00
+	.number_of_fat:        db 0x00
+	.root_entries:         dw 0x00
+	.total_sectors:        dw 0x00
+	.media_descriptor:     db 0x00
+	.sectors_per_fat:      dw 0x00
 
-// BIOS Parameter Block is required because some bioses are overwriting this section.
-// References:	
-//   https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB
-.zero 0x03 - (. - _start)
-	bpb.oem_id:               .ascii "HOLCAK  "
-	bpb.bytes_per_sector:     .word 0x0200
-	bpb.sectors_per_cluster:  .byte 0x00
-	bpb.reserved_sectors:     .word 0x00
-	bpb.number_of_fat:        .byte 0x00
-	bpb.root_entries:         .word 0x00
-	bpb.total_sectors:        .word 0x00
-	bpb.media_descriptor:     .byte 0x00
-	bpb.sectors_per_fat:      .word 0x00
+	.sectors_per_track:    dw 0x12
+	.number_of_heads:      dw 0x02
+	.hidden_sectors:       dd 0x00
+	.large_total_sectors:  dd 0x00
 
-	bpb.sectors_per_track:    .word 0x12
-	bpb.number_of_heads:      .word 0x02
-	bpb.hidden_sectors:       .long 0x00
-	bpb.large_total_sectors:  .long 0x00
+	.drive_number:         db 0x00
+	.flags:                db 0x00
+	.boot_signature:       db 0x00
+	.volume_serial_number: dd 0x00
+	.volume_label:         db "HOLCAK     "
+	.file_system_type:     times 0x08 db 0x00
 
-	bpb.drive_number:         .byte 0x00
-	bpb.flags:                .byte 0x00
-	bpb.boot_signature:       .byte 0x00
-	bpb.volume_serial_number: .long 0x00
-	bpb.volume_label:         .ascii "HOLCAK     "
-	bpb.file_system_type:     .zero 0x08
+%include "puts.inc"
+%include "disk.inc"
 
-.include "puts.inc"
-.include "disk.inc"
-
+[bits 16]
 main:
-	// Initialize registers
+	; Initialize registers
 	cli
 	xor ax, ax
 	mov ds, ax
 	mov es, ax
 	mov ss, ax
-	mov sp, 0x1000
-	mov bp, sp
+	mov sp, 0x7C00
 
-	// Relocate to lower address
+	; Relocate itself to lower address
 	cld
 	mov cx, 0x0200
 	mov si, 0x7C00
 	mov di, 0x0500
 	rep movsb
-	jmp 0x0000:main.load
+	jmp 0x0000:.next
 
-main.load:
-	// Load stage2 into memory
+[bits 16]
+.next:
+	; Load stage2 into memory
 	call disk_init
-	mov eax, [stage2.address.lo]
-	mov cx,  [stage2.address.hi]
-	mov ebx, (stage2.buffer << 0x0C) | (stage2.buffer % 0x10)
-	mov si,  [stage2.sectors]
+	mov eax, [stage2_address.lo]
+	mov cx,  [stage2_address.hi]
+	mov ebx, (stage2_buffer << 0x0C) | (stage2_buffer % 0x10)
+	mov si,  [stage2_sectors]
 	call disk_read
 
-	jmp stage2.buffer
+	; Jump to stage2
+	jmp stage2_buffer
 
-.zero 0x01B0 - (. - _start)
-	stage2.address.lo: .long 0x00
-	stage2.address.hi: .word 0x00
-	stage2.sectors:    .word 0x00
-	.equ stage2.buffer,    0x1000
+times 0x01B0-($-$$) db 0x00
+stage2_address:
+	.lo: dd 0x00
+	.hi: dw 0x00
+stage2_sectors: dw  0x00
+stage2_buffer:  equ 0x1000
 
-.zero 0x01B8 - (. - _start)
-	mbr.signature: .long 0x00
-	mbr.reserved:  .word 0x00
+times 0x01B8-($-$$) db 0x00
+signature: dd 0x00
+reserved:  dw 0x00
 
-.zero 0x01BE - (. - _start)
-.macro partition_init index
-	partition\index\().bootable: .byte 0x00
-	partition\index\().start.lo: .byte 0x00
-	partition\index\().start.hi: .word 0x00
-	partition\index\().system:   .byte 0x00
-	partition\index\().end.lo:   .byte 0x00
-	partition\index\().end.hi:   .word 0x00
-	partition\index\().address:  .long 0x00
-	partition\index\().sectors:  .long 0x00
-.endm
+times 0x01BE-($-$$) db 0x00
+%macro partition_make 1
+partition_%1:
+	.bootable:     db 0x00
+	.chs_start_lo: db 0x00
+	.chs_start_hi: dw 0x00
+	.system_id:    db 0x00
+	.chs_end_lo:   db 0x00
+	.chs_end_hi:   dw 0x00
+	.address:      dd 0x00
+	.sectors:      dd 0x00
+%endmacro
 
-partition_init 1
-partition_init 2
-partition_init 3
-partition_init 4
+partition_make 1
+partition_make 2
+partition_make 3
+partition_make 4
 
-.zero 0x01FE - (. - _start)
-.word 0xAA55
+times 0x01FE-($-$$) db 0x00
+dw 0xAA55
