@@ -1,3 +1,5 @@
+; asmsyntax=nasm
+
 ; Initializes disk
 ; Parameters:
 ;   dl    - Disk number

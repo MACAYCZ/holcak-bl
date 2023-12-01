@@ -1,3 +1,4 @@
+; asmsyntax=nasm
 %define endl 0x0D, 0x0A
 
 ; Prints string ending with NUL
@@ -30,11 +31,12 @@ puts:
 ;   https://stanislavs.org/helppc/int_10-e.html
 [bits 16]
 pute:
-	mov si, .msg0
+	mov si, .str0
 	call puts
 	mov ah, 0x0E
 	int 0x10
 	cli
 	hlt
 
-.msg0: db "Error: ", 0x00
+.str0:
+	db "Error: ", 0x00
