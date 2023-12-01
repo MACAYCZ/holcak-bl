@@ -1,40 +1,40 @@
-; asmsyntax=nasm
-%define endl 0x0D, 0x0A
+.intel_syntax noprefix
+.code16
 
-; Prints string ending with NUL
-; Parameters:
-;   ds:si - String address
-; References:
-;   https://stanislavs.org/helppc/int_10-e.html
+// Prints string ending with NUL
+// Parameters:
+//   ds:si - String address
+// References:
+//   https://stanislavs.org/helppc/int_10-e.html
 puts:
 	push ax
 	push si
 	mov ah, 0x0E
 
-.loop:
+puts.loop:
 	lodsb
 	test al, al
-	jz .done
+	jz puts.done
 	int 0x10
-	jmp .loop
+	jmp puts.loop
 
-.done:
+puts.done:
 	pop si
 	pop ax
 	ret
 
-; Prints ascii symbol representing error code and halts
-; Parameters:
-;   al    - Error code
-; References:
-;   https://stanislavs.org/helppc/int_10-e.html
+// Prints ascii symbol representing error code and halts
+// Parameters:
+//   al    - Error code
+// References:
+//   https://stanislavs.org/helppc/int_10-e.html
 pute:
-	mov si, .str0
+	mov si, pute.str0
 	call puts
 	mov ah, 0x0E
 	int 0x10
 	cli
 	hlt
 
-.str0:
-	db "Error: ", 0x00
+pute.str0:
+	.asciz "Error: "

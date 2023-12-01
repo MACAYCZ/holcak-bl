@@ -1,7 +1,10 @@
-[bits 16]
+.intel_syntax noprefix
+.code16
 
-[global entry]
-entry:
+.section .text
+.global _start
+
+_start:
 	mov al, 'A'
 	mov ah, 0x0E
 	int 0x10
