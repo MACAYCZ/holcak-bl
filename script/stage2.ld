@@ -13,6 +13,7 @@ SECTIONS
 		__text_start = .;
 		*(.entry .entry.*)
 		*(.text .text.*)
+		__text_end = .;
 	}
 
 	.data :
@@ -20,12 +21,14 @@ SECTIONS
 		__data_start = .;
 		*(.data .data.*)
 		*(.bss .bss.*)
+		__data_end = .;
 	}
 
 	.rodata :
 	{
 		__rodata_start = .;
 		*(.rodata .rodata.*)
+		__rodata_end = .;
 	}
 
 	__end = .;

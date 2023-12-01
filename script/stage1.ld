@@ -12,12 +12,14 @@ SECTIONS
 	{
 		__text_start = .;
 		*(.text .text.*)
+		__text_end = .;
 	}
 
 	.bss :
 	{
 		__bss_start = .;
 		*(.bss .bss.*)
+		__bss_end = .;
 	}
 
 	__end = .;
