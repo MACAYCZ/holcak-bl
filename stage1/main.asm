@@ -8,7 +8,6 @@ times 0x03-($-$$) db 0x00
 ; BIOS Parameter Block is needed because some bioses are overwriting this section
 ; References:	
 ;   https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB
-[bits 16]
 bpb_oem_id:               db "HOLCAK  "
 bpb_bytes_per_sector:     dw 0x0200
 bpb_sectors_per_cluster:  db 0x00
@@ -32,7 +31,6 @@ bpb_file_system_type:     times 0x08 db 0x00
 %include "puts.inc"
 %include "disk.inc"
 
-[bits 16]
 main:
 	; Initialize registers
 	cli
@@ -50,7 +48,6 @@ main:
 	rep movsb
 	jmp 0x0000:.next
 
-[bits 16]
 .next:
 	; Load stage2 into memory
 	call disk_init

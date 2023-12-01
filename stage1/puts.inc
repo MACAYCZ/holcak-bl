@@ -6,7 +6,6 @@
 ;   ds:si - String address
 ; References:
 ;   https://stanislavs.org/helppc/int_10-e.html
-[bits 16]
 puts:
 	push ax
 	push si
@@ -29,7 +28,6 @@ puts:
 ;   al    - Error code
 ; References:
 ;   https://stanislavs.org/helppc/int_10-e.html
-[bits 16]
 pute:
 	mov si, .str0
 	call puts

@@ -6,7 +6,6 @@
 ; References:
 ;   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present
 ;   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=08h:_Read_Drive_Parameters
-[bits 16]
 disk_init:
 	pushad
 	mov ah, 0x41
@@ -40,7 +39,6 @@ disk_init:
 ; Resets disk controller
 ; Parameters:
 ;   dl    - Disk number
-[bits 16]
 disk_reset:
 	push ax
 	xor ah, ah
@@ -60,7 +58,6 @@ disk_reset:
 ;   cx    - LBA high pointing to the beginning of the data
 ;   si    - Number of sectors to read
 ;   dl    - Disk number
-[bits 16]
 disk_read:
 	push cx
 	mov cx, [disk_info.extensions]
@@ -83,7 +80,6 @@ disk_read:
 ;   dl    - Disk number
 ; References:
 ;   https://stanislavs.org/helppc/int_13-2.html
-[bits 16]
 disk_read_0x02:
 	pushad
 	push es
@@ -190,7 +186,6 @@ section .text
 ; References:
 ;   http://www.ctyme.com/intr/rb-0708.htm
 ;   https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive
-[bits 16]
 disk_read_0x42:
 	pusha
 
