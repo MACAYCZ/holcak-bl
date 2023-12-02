@@ -1,10 +1,12 @@
 # Todo!
 - [ ] 16-bit Mode
+    - [ ] Enable A20
+    - [ ] Detect MEM
     - [ ] Detect PCI
     - [ ] Enable GDT
 - [ ] Memory Management
-    - [ ] Detect memory
-    - [ ] Enable A20
+    - [ ] Physical
+    - [ ] Virtual
     - [ ] malloc()
 - [ ] Disk Drivers
     - [ ] FDC
