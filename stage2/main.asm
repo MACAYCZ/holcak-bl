@@ -12,12 +12,5 @@ _start:
 	mov sp, 0x1000
 	mov bp, sp
 
-	mov cx, 0x02
-	mov si, offset buffer
-	call putx
-
 	cli
 	hlt
-
-.section .rodata
-	buffer: .byte 0xAB, 0xCD

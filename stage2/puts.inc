@@ -43,10 +43,10 @@ putxd.dump:
 	pop ax
 	ret	
 
-// Prints N bytes in hexadecimal format
+// Prints little-endian integer in hexadecimal format
 // Parameters:
-//   ds:si - Bytes
-//   cx    - Count
+//   ds:si - Integer address
+//   cx    - Size
 // References:
 //   https://stanislavs.org/helppc/int_10-e.html
 putx:
@@ -61,9 +61,13 @@ putx.next:
 	pop si
 
 	pusha
+	add si, cx
+	dec si
 
 putx.loop:
+	std
 	lodsb
+	cld
 
 	mov bl, al
 	shr al, 0x04
@@ -82,3 +86,16 @@ putx.done:
 
 putx.prefix:
 	.asciz "0x"
+
+// Moves cursor to new line
+// References:
+//   https://stanislavs.org/helppc/int_10-e.html
+putnl:
+	push si
+	mov si, offset putnl.data
+	call puts
+	pop si
+	ret
+
+putnl.data:
+	.asciz "\n\r"
