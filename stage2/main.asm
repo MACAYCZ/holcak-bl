@@ -17,5 +17,18 @@ _start:
 	call mem_init
 	call a20_init
 
+	// Enter protected mode
+	lgdt [gdt.desc]
+	mov eax, cr0
+	or eax, 0x01
+	mov cr0, eax
+	jmp code_seg:entry
+
+.section .text
+.code32
+
+entry:
 	cli
 	hlt
+
+.include "gdt.inc"
