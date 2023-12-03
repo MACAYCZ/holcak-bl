@@ -12,19 +12,19 @@ mem_init:
 	jc mem_init.error
 
 	// Print debug information
-	mov si, offset mem_init.debug
+	mov si, offset mem_init.str_0
 	call puts
 
 	// Print lower and upper memory size
 	mov cx, 0x02
 
-	mov si, offset mem_init.lower
+	mov si, offset mem_init.str_1
 	call puts
 	mov si, offset mem_info.lower
 	call putx
 	call putnl
 
-	mov si, offset mem_init.upper
+	mov si, offset mem_init.str_2
 	call puts
 	mov si, offset mem_info.upper
 	call putx
@@ -34,24 +34,68 @@ mem_init:
 	call mem_init_0xE820
 	jc mem_init.error
 
+	// Print memory map
+	xor cx, cx
+	inc cx
+
+	xor ebx, ebx
+	mov eax, [mem_map.size]
+	mov di, offset mem_map.data
+
+mem_init.loop:
+	mov si, offset mem_init.str_3
+	call puts
+
+	push bx
+	mov si, sp
+	call putx
+	pop bx
+
+	mov si, offset mem_init.str_4
+	call puts
+
+	call mem_node_print
+
+	inc ebx
+	add di, offset mem_node_size
+
+	cmp ebx, eax
+	jne mem_init.loop
+
+	// Print debug information
+	mov si, offset mem_init.str_6
+	call puts
+
+	mov cx, 0x04
+	mov si, offset mem_map.bytes
+	call putx
+	call putnl
+
+	mov si, offset mem_init.str_7
+	call puts
+
+	mov si, offset mem_map.size
+	call putx
+	call putnl
+
 mem_init.done:
 	popa
 	ret
 
 mem_init.error:
-	mov si, offset mem_init.fatal
+	mov si, offset mem_init.str_5
 	call puts
 	cli
 	hlt
 
-mem_init.debug:
-	.asciz "[DEBUG] Memory structure:\n\r"
-mem_init.lower:
-	.asciz "    Lower: "
-mem_init.upper:
-	.asciz "    Upper: "
-mem_init.fatal:
-	.asciz "[ERROR] Memory initialization failed!\n\r"
+mem_init.str_0: .asciz "[DEBUG] Memory structure:\n\r"
+mem_init.str_1: .asciz "    Lower: "
+mem_init.str_2: .asciz "    Upper: "
+mem_init.str_3: .asciz "    "
+mem_init.str_4: .asciz ":  "
+mem_init.str_5: .asciz "[ERROR] Memory initialization failed!\n\r"
+mem_init.str_6: .asciz "    Bytes: "
+mem_init.str_7: .asciz "    Size:  "
 
 // Detects information about memory using int 0x15, ax=0xE801
 // Returns:
@@ -135,7 +179,7 @@ mem_init_0xE820.loop:
 	je mem_init_0xE820.warning
 
 	// Convert 32-bit address to segment:offset
-	add edi, mem_node_size
+	add edi, offset mem_node_size
 	push edi
 	mov eax, edi
 	shr eax, 0x04
@@ -167,7 +211,7 @@ mem_init_0xE820.done:
 
 mem_init_0xE820.warning:
 	push si
-	mov si, offset mem_init_0xE820.debug
+	mov si, offset mem_init_0xE820.str_0
 	call puts
 	pop si
 	jmp mem_init_0xE820.done
@@ -179,8 +223,46 @@ mem_init_0xE820.error:
 	stc
 	ret
 
-mem_init_0xE820.debug:
-	.asciz "[ERROR] Memory map exceeded maximum size!\n\r"
+mem_init_0xE820.str_0: .asciz "[ERROR] Memory map exceeded maximum size!\n\r"
+
+// Prints information about memory node
+// Parameters:
+//   di    - Memory node address
+// References:
+//   https://wiki.osdev.org/Detecting_Memory_(x86)#BIOS_Function:_INT_0x15.2C_EAX_.3D_0xE820
+mem_node_print:
+	push si
+	push cx
+
+	mov cx, 0x08
+	mov si, di
+	call putx
+
+	mov si, offset mem_node_print.str_0
+	call puts
+
+	mov si, di
+	add si, 0x08
+	call putx
+
+	mov si, offset mem_node_print.str_1
+	call puts
+
+	mov cx, 0x04
+	mov si, di
+	add si, 0x10
+	call putx
+
+	mov si, offset mem_node_print.str_2
+	call puts
+
+	pop cx
+	pop si
+	ret
+
+mem_node_print.str_0: .asciz " = "
+mem_node_print.str_1: .asciz " ("
+mem_node_print.str_2: .asciz ")\n\r"
 
 .struct 0x00
 	mem_node:

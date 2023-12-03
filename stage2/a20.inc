@@ -37,7 +37,7 @@ a20_init.try_2:
 
 a20_init.error:
 	// Print error message
-	mov si, offset a20_init.fatal
+	mov si, offset a20_init.str_1
 	call puts
 
 	cli
@@ -46,17 +46,15 @@ a20_init.error:
 a20_init.done:
 	// Print debug message
 	push si
-	mov si, offset a20_init.debug
+	mov si, offset a20_init.str_0
 	call puts
 	pop si
 
 	pop ax
 	ret
 
-a20_init.debug:
-	.asciz "[DEBUG] A20 enabled!\n\r"
-a20_init.fatal:
-	.asciz "[Error] A20 cannot be enabled!\n\r"
+a20_init.str_0: .asciz "[DEBUG] A20 enabled!\n\r"
+a20_init.str_1: .asciz "[Error] A20 cannot be enabled!\n\r"
 
 // Tests if A20 line is enabled
 // Returns:

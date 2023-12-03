@@ -29,12 +29,11 @@ puts.done:
 // References:
 //   https://stanislavs.org/helppc/int_10-e.html
 pute:
-	mov si, offset pute.error
+	mov si, offset pute.str_0
 	call puts
 	mov ah, 0x0E
 	int 0x10
 	cli
 	hlt
 
-pute.error:
-	.asciz "[Error] "
+pute.str_0: .asciz "[Error] "
