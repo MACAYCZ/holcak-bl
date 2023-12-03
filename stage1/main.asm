@@ -69,7 +69,7 @@ main.load:
 	stage2.address.lo: .long 0x00
 	stage2.address.hi: .word 0x00
 	stage2.sectors:    .word 0x00
-	.equ stage2.buffer,    0x1000
+	stage2.buffer        = 0x1000
 
 .zero 0x01FE - (. - _start)
 .word 0xAA55

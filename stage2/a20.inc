@@ -54,9 +54,9 @@ a20_init.done:
 	ret
 
 a20_init.debug:
-	.asciz "A20 enabled!\n\r"
+	.asciz "[DEBUG] A20 enabled!\n\r"
 a20_init.fatal:
-	.asciz "Error: Enabling A20 failed!\n\r"
+	.asciz "[Error] A20 cannot be enabled!\n\r"
 
 // Tests if A20 line is enabled
 // Returns:

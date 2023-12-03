@@ -37,4 +37,4 @@ pute:
 	hlt
 
 pute.error:
-	.asciz "Error: "
+	.asciz "[Error] "

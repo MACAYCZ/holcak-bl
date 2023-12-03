@@ -168,7 +168,7 @@ disk_read_0x02.done:
 	ret
 
 .section .bss
-disk_info:
+	disk_info:
 	disk_info.extensions: .space 0x01
 	disk_info.cylinders:  .space 0x02
 	disk_info.heads:      .space 0x01
@@ -212,12 +212,12 @@ disk_read_0x42.error:
 	jmp pute
 
 .section .bss
-disk_packet:
+	disk_packet:
 	disk_packet.size:     .space  0x01
 	disk_packet.reserved: .space  0x01
 	disk_packet.sectors:  .space  0x02
 	disk_packet.buffer:   .space  0x04
 	disk_packet.lba.lo:   .space  0x04
 	disk_packet.lba.hi:   .space  0x04
-	.equ disk_packet_size, disk_packet
+	disk_packet_size = . - disk_packet
 .section .text
