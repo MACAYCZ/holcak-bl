@@ -130,9 +130,8 @@ mem_init_0xE820:
 
 mem_init_0xE820.loop:
 	// Check if size was exceeded
-	// TODO: mem_map_size contains some garbage for some reason!
 	inc esi
-	cmp esi, mem_map_size
+	cmp esi, offset mem_map_size
 	je mem_init_0xE820.warning
 
 	// Convert 32-bit address to segment:offset
