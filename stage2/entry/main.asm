@@ -27,8 +27,21 @@ _start:
 .section .text
 .code32
 
+.extern main
 entry:
+	// Initialize registers
 	cli
-	hlt
+	xor ax, ax
+	mov es, ax
+	mov ds, ax
+
+	mov ebp, offset stack + offset stack_size
+	mov esp, ebp
+
+	jmp main
 
 .include "gdt.inc"
+
+.section .bss
+	stack: .space stack_size
+	stack_size = 0x1000
