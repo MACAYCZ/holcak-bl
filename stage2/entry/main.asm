@@ -22,7 +22,7 @@ _start:
 	mov eax, cr0
 	or eax, 0x01
 	mov cr0, eax
-	jmp code_seg:entry
+	jmp 0x08:entry
 
 .section .text
 .code32
@@ -35,6 +35,7 @@ entry:
 	mov es, ax
 	mov ds, ax
 
+	// Initialize stack
 	mov ebp, offset stack + offset stack_size
 	mov esp, ebp
 

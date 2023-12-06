@@ -1,19 +1,11 @@
 # Todo!
-- [ ] 16-bit Mode
-    - [ ] Enable A20
-    - [ ] Detect MEM
-    - [ ] Detect PCI
-    - [ ] Enable GDT
+- [X] 16-bit Mode
+    - [X] Enable A20
+    - [X] Enable GDT
 - [ ] Memory Management
+    - [ ] Detect memory
     - [ ] Physical
-    - [ ] Virtual
     - [ ] malloc()
-- [ ] Disk Drivers
-    - [ ] FDC
-    - [ ] PAta
-    - [ ] PAtaPi
-    - [ ] SAta
-    - [ ] NVMe
 - [ ] File Systems
     - [ ] FAT12/16/32
     - [ ] NTFS

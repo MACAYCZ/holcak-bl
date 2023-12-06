@@ -1,15 +1,16 @@
-#include <stddef.h>
+#include <stdnoreturn.h>
+#include "define.h"
+#include "x86_16.h"
 
-void puts(const char *str)
+__cdecl noreturn void main(void)
 {
-	for (size_t i = 0; str[i]; i++)
-	{
-		*((char*)0xB8000 + i * 0x02) = str[i];
-	}
-}
+	x86_16_regs_t input = {
+		.eax = 0x0E30,
+	};
+	x86_16_regs_t output;
+	x86_16_int(0x10, &input, &output);
 
-_Noreturn void main(void)
-{
-	puts("Hello, World!");
+	*((char*)0xB8000) = 'B';
+
 	while (1);
 }

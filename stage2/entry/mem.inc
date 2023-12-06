@@ -88,7 +88,7 @@ mem_init.error:
 	cli
 	hlt
 
-mem_init.str_0: .asciz "[DEBUG] Memory structure:\n\r"
+mem_init.str_0: .asciz "[DEBUG] Memory detected!\n\r"
 mem_init.str_1: .asciz "    Lower: "
 mem_init.str_2: .asciz "    Upper: "
 mem_init.str_3: .asciz "    "
