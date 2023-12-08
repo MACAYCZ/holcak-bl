@@ -34,6 +34,8 @@ entry:
 	xor ax, ax
 	mov es, ax
 	mov ds, ax
+	mov ax, 0x10
+	mov ss, ax
 
 	// Initialize stack
 	mov ebp, offset stack + offset stack_size

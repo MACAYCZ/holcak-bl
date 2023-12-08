@@ -2,10 +2,11 @@
 
 #pragma once
 #include <stdint.h>
+#include <stddef.h>
 #include "define.h"
 
-#define x86_16_SEGMENT(Address) ((Address) >> 0x04)
-#define x86_16_OFFSET(Address) ((Address) & 0x0F)
+#define x86_16_SEGMENT(Address) ((size_t)(Address) >> 0x04)
+#define x86_16_OFFSET(Address) ((size_t)(Address) & 0x0F)
 
 typedef struct __packed {
 	uint16_t gs;
