@@ -34,7 +34,10 @@ entry:
 	xor ax, ax
 	mov es, ax
 	mov ds, ax
+	mov fs, ax
+
 	mov ax, 0x10
+	mov ds, ax
 	mov ss, ax
 
 	// Initialize stack

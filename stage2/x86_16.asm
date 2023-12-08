@@ -18,6 +18,8 @@ x86_16_int:
 	mov eax, [esp+0x0C]
 	mov [x86_16_int.output], eax
 
+	sgdt [x86_16_int.gdt]
+	sidt [x86_16_int.idt]
 	lidt [x86_16_int.ivt]
 
 	push ebx
@@ -40,8 +42,8 @@ x86_16_int.zero:
 	xor ax, ax
 	mov ss, ax
 
-	mov [ss:x86_16_int.esp], esp
-	mov esp, [ss:x86_16_int.input]
+	mov ss:[x86_16_int.esp], esp
+	mov esp, ss:[x86_16_int.input]
 	pop gs
 	pop fs
 	pop es
@@ -54,7 +56,7 @@ x86_16_int.zero:
 	pop ecx
 	pop ebx
 	pop eax
-	mov esp, [ss:x86_16_int.esp]
+	mov esp, ss:[x86_16_int.esp]
 	sti
 
 	.byte 0xCD
@@ -79,6 +81,9 @@ x86_16_int.int:
 	push gs
 	mov esp, ss:[x86_16_int.esp]
 
+	lgdt ss:[x86_16_int.gdt]
+	lidt ss:[x86_16_int.idt]
+
 	mov eax, cr0
 	or al, 0x01
 	mov cr0, eax
@@ -90,6 +95,7 @@ x86_16_int.done:
 
 	mov ax, 0x10
 	mov ss, ax
+	mov ds, ax
 
 	pop ebp
 	pop edi
@@ -101,6 +107,12 @@ x86_16_int.done:
 x86_16_int.ivt:
 	.word 0x03FF
 	.long 0x00
+
+x86_16_int.gdt:
+	.quad 0x00
+
+x86_16_int.idt:
+	.quad 0x00
 
 x86_16_int.input:
 	.long 0x00
