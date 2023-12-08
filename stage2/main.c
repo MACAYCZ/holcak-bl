@@ -19,6 +19,14 @@ void x86_putc(char chr)
 	x86_16_int(0x10, &input, &output);
 }
 
+void x86_puts(const char *str)
+{
+	for (size_t i = 0; str[i]; i++)
+	{
+		x86_putc(str[i]);
+	}
+}
+
 __cdecl noreturn void main(void)
 {
 	/*
@@ -37,8 +45,7 @@ __cdecl noreturn void main(void)
 	x86_16_int(0x15, &input, &output);
 	*/
 
-	x86_putc('A');
-	x86_putc('B');
+	x86_puts("Hello, World!");
 
 	while (1);
 }
