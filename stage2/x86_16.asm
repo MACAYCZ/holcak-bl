@@ -93,9 +93,14 @@ x86_16_int.int:
 x86_16_int.done:
 	.code32
 
+	xor ax, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
+
 	mov ax, 0x10
-	mov ss, ax
 	mov ds, ax
+	mov ss, ax
 
 	pop ebp
 	pop edi

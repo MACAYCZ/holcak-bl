@@ -24,4 +24,4 @@ typedef struct __packed {
 } x86_16_regs_t;
 
 __cdecl extern void
-x86_16_int(uint8_t index, x86_16_regs_t *input, x86_16_regs_t *output);
+x86_16_int(uint8_t index, const x86_16_regs_t *input, x86_16_regs_t *output);

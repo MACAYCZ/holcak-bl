@@ -33,8 +33,8 @@ entry:
 	cli
 	xor ax, ax
 	mov es, ax
-	mov ds, ax
 	mov fs, ax
+	mov gs, ax
 
 	mov ax, 0x10
 	mov ds, ax
