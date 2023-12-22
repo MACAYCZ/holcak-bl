@@ -35,4 +35,4 @@ gdt.data16:
 	.byte 0x00
 gdt.desc:
 	.word gdt.desc - gdt.null - 0x01
-	.word gdt.null
+	.long gdt.null

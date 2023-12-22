@@ -1,15 +1,14 @@
-// NOTE: https://github.com/limine-bootloader/limine/blob/1ae036c3feb3717d1f6171e43e389eb8214bd963/common/lib/real.h
-
 #pragma once
+#include <stage2/global.h>
 #include <stdint.h>
 #include <stddef.h>
-
-#include <stage2/define.h>
 
 #define x86_16_SEGMENT(Address) ((size_t)(Address) >> 0x04)
 #define x86_16_OFFSET(Address) ((size_t)(Address) & 0x0F)
 
-#define x86_EFLAGS_CARRY 0x01
+typedef enum {
+	x86_EFLAGS_CARRY = 0x01,
+} x86_eflags_t;
 
 typedef struct __packed {
 	uint16_t gs;

@@ -1,6 +1,7 @@
-#include "console.h"
-#include "x86_16.h"
+#include <stage2/driver/x86_16.h>
+#include "printf.h"
 
+/*
 void putc(char chr)
 {
 	x86_16_regs_t input = {
@@ -59,3 +60,4 @@ void vprintf(const char *fmt, va_list args)
 		}
 	}
 }
+*/
