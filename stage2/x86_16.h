@@ -3,10 +3,13 @@
 #pragma once
 #include <stdint.h>
 #include <stddef.h>
-#include "define.h"
+
+#include <stage2/define.h>
 
 #define x86_16_SEGMENT(Address) ((size_t)(Address) >> 0x04)
 #define x86_16_OFFSET(Address) ((size_t)(Address) & 0x0F)
+
+#define x86_EFLAGS_CARRY 0x01
 
 typedef struct __packed {
 	uint16_t gs;
@@ -23,5 +26,4 @@ typedef struct __packed {
 	uint32_t eax;
 } x86_16_regs_t;
 
-__cdecl extern void
-x86_16_int(uint8_t index, const x86_16_regs_t *input, x86_16_regs_t *output);
+__cdecl extern void x86_16_int(uint8_t index, const x86_16_regs_t *input, x86_16_regs_t *output);

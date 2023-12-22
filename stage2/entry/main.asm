@@ -1,22 +1,12 @@
 .intel_syntax noprefix
-.code16
 
-.section .text
-.include "puts.inc"
-.include "a20.inc"
-.include "mem.inc"
-
-.section .entry
 .global _start
+.extern main
+
+.code16
+.section .entry
 
 _start:
-	// Initialize registers
-	mov sp, 0x1000
-	mov bp, sp
-
-	call mem_init
-	call a20_init
-
 	// Enter protected mode
 	lgdt [gdt.desc]
 	mov eax, cr0
@@ -24,13 +14,14 @@ _start:
 	mov cr0, eax
 	jmp 0x08:entry
 
-.section .text
 .code32
+.section .text
 
-.extern main
 entry:
 	// Initialize registers
 	cli
+	cld
+
 	xor ax, ax
 	mov es, ax
 	mov fs, ax
@@ -44,10 +35,18 @@ entry:
 	mov ebp, offset stack + offset stack_size
 	mov esp, ebp
 
+	// Zero out bss section
+	mov edi, __bss_start
+	mov ecx, __bss_end
+	sub ecx, edi
+
+	xor al, al
+	rep stosb
+
 	jmp main
 
 .include "gdt.inc"
 
 .section .bss
 	stack: .space stack_size
-	stack_size = 0x1000
+	stack_size = 0x2000

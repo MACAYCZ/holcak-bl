@@ -34,5 +34,5 @@ gdt.data16:
 	.byte 0x0F
 	.byte 0x00
 gdt.desc:
-	.word gdt.desc - gdt - 0x01
-	.word gdt
+	.word gdt.desc - gdt.null - 0x01
+	.word gdt.null
