@@ -7,9 +7,9 @@
 
 __cdecl noreturn void main(void)
 {
-	printf("\e\x34Hello, \e\x12%u!\n", 0x1234);
+	printf("\e\x34Hello,\e\x12 %u!\n", 0x1234);
 
-	mem_info_t mem_info = mem_init();
+//	mem_info_t mem_info = mem_init();
 //	pmm_info_t pmm_info = pmm_init();
 	while (1);
 }

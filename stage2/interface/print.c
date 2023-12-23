@@ -25,7 +25,7 @@ static void puts(const char *str, uint8_t color, uint16_t *cursor)
 
 static void putu(uint64_t value, uint8_t base, uint8_t color, uint16_t *cursor)
 {
-	char buffer[sizeof(value) * 8 -1];
+	char buffer[sizeof(value) * 8 - 1];
 	buffer[sizeof(buffer) - 1] = '\0';
 
 	size_t i = 1;
@@ -60,6 +60,9 @@ void vprintf(const char *fmt, va_list args)
 			continue;
 		}
 
+		size_t bytes = 0;
+
+	format:
 		switch (*++fmt) {
 		case 'c':
 			putc(va_arg(args, int), color, &cursor);
@@ -67,15 +70,24 @@ void vprintf(const char *fmt, va_list args)
 		case 's':
 			puts(va_arg(args, const char*), color, &cursor);
 			break;
+		case 'h':
+			bytes = bytes ? bytes >> 1 : sizeof(uint16_t);
+			goto format;
+		case 'l':
+			bytes = bytes ? bytes << 1 : sizeof(uint32_t);
+			goto format;
 		case 'o':
-			putu(va_arg(args, uint32_t), 8, color, &cursor);
+			bytes = bytes ? bytes : sizeof(uint32_t);
+			putu((bytes >= sizeof(uint64_t) ? va_arg(args, uint64_t) : va_arg(args, uint32_t) & (((uint64_t)1 << (bytes << 3)) - 1)), 8, color, &cursor);
 			break;
 		case 'u':
-			putu(va_arg(args, uint32_t), 10, color, &cursor);
+			bytes = bytes ? bytes : sizeof(uint32_t);
+			putu((bytes >= sizeof(uint64_t) ? va_arg(args, uint64_t) : va_arg(args, uint32_t) & (((uint64_t)1 << (bytes << 3)) - 1)), 10, color, &cursor);
 			break;
 		case 'x':
 		case 'p':
-			putu(va_arg(args, uint32_t), 16, color, &cursor);
+			bytes = bytes ? bytes : sizeof(uint32_t);
+			putu((bytes >= sizeof(uint64_t) ? va_arg(args, uint64_t) : va_arg(args, uint32_t) & (((uint64_t)1 << (bytes << 3)) - 1)), 16, color, &cursor);
 			break;
 		case '%':
 			putc('%', color, &cursor);
