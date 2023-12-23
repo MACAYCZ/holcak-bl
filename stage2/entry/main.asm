@@ -10,6 +10,22 @@ _start:
 	// Initialize registers
 	mov ebp, 0x1000
 	mov esp, ebp
+
+	// Set video mode
+	xor ah, ah
+	mov al, 0x03
+	int 0x10
+	cmp al, 0x30
+	je _start.next
+
+	// Print error message
+	mov si, offset _start.str_0
+	call puts
+	cli
+	hlt
+
+_start.next:
+	// Enable line A20
 	call a20_init
 
 	// Enter protected mode
@@ -18,6 +34,9 @@ _start:
 	or eax, 0x01
 	mov cr0, eax
 	jmp 0x08:entry
+
+_start.str_0:
+	.asciz "Initializing video mode failed!\n\r"
 
 .include "puts.inc"
 .include "a20.inc"

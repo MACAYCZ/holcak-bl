@@ -20,7 +20,7 @@ build/%.asm.o: %.asm
 
 build/%.c.o: %.c
 	@mkdir -p ${@D}
-	${CC} -Wall -Wextra -pedantic -std=gnu17 -ggdb -ffreestanding -nostartfiles -MD -fno-pie -fno-pic -nostdlib -nostdinc -c -masm=intel -m32 -I ${INCLUDE} -I . -o $@ $<
+	${CC} -Wall -Wextra -std=gnu17 -ggdb -ffreestanding -nostartfiles -MD -fno-pie -fno-pic -nostdlib -nostdinc -c -m32 -I ${INCLUDE} -I . -o $@ $<
 
 ifeq (1,$(shell if [ -d build/ ]; then echo 1; fi))
     -include $(shell find build/ -type f -name '*.d')

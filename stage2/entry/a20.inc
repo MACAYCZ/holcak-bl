@@ -6,6 +6,11 @@
 //   https://wiki.osdev.org/A20_Line#Enabling
 a20_init:
 	push ax
+	push si
+
+	mov si, offset a20_init.str_0
+	call puts
+
 	call a20_test
 	jc a20_init.done
 
@@ -37,7 +42,7 @@ a20_init.try_2:
 
 a20_init.error:
 	// Print error message
-	mov si, offset a20_init.str_1
+	mov si, offset a20_init.str_2
 	call puts
 
 	cli
@@ -45,16 +50,16 @@ a20_init.error:
 
 a20_init.done:
 	// Print debug message
-	push si
-	mov si, offset a20_init.str_0
+	mov si, offset a20_init.str_1
 	call puts
-	pop si
 
+	pop si
 	pop ax
 	ret
 
-a20_init.str_0: .asciz "[DEBUG] A20 enabled!\n\r"
-a20_init.str_1: .asciz "[ERROR] A20 cannot be enabled!\n\r"
+a20_init.str_0: .asciz "Initializing A20... "
+a20_init.str_1: .asciz "Ok!\n\r"
+a20_init.str_2: .asciz "Failed!\n\r"
 
 // Tests if A20 line is enabled
 // Returns:
