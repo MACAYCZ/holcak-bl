@@ -7,12 +7,21 @@
 .section .entry
 
 _start:
+	// Initialize registers
+	mov ebp, 0x1000
+	mov esp, ebp
+	call a20_init
+
 	// Enter protected mode
 	lgdt [gdt.desc]
 	mov eax, cr0
 	or eax, 0x01
 	mov cr0, eax
 	jmp 0x08:entry
+
+.include "puts.inc"
+.include "a20.inc"
+.include "gdt.inc"
 
 .code32
 .section .text
@@ -44,8 +53,6 @@ entry:
 	rep stosb
 
 	jmp main
-
-.include "gdt.inc"
 
 .section .bss
 	stack: .space stack_size
