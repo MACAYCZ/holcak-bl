@@ -7,12 +7,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 Support for booting unpartitioned media with the chainload protocol.
 
 ### Added
-- [ ] Switching between 16-bit and 32-bit mode
-    - [ ] GAS macros for entering and leaving 16-bit mode
-    - [ ] Function for calling BIOS interrupts from C
+- [X] Function for calling BIOS interrupts from C
 - [ ] Reading sectors from disk using BIOS interrupts
     - [ ] [Read disk parameters](https://stanislavs.org/helppc/int_13-8.html)
     - [ ] [Check present extensions](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present)
     - [ ] [Read disk sectors](https://stanislavs.org/helppc/int_13-2.html)
-    - [ ] [Read extended disk sectors](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive)
+    - [ ] [Extended read disk sectors](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive)
 - [ ] Chainload protocol function
