@@ -9,8 +9,8 @@ Support for booting unpartitioned media with the chainload protocol.
 ### Added
 - [X] Function for calling BIOS interrupts from C
 - [ ] Reading sectors from disk using BIOS interrupts
-    - [ ] [Read disk parameters](https://stanislavs.org/helppc/int_13-8.html)
-    - [ ] [Check present extensions](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present)
+    - [X] [Read disk parameters](https://stanislavs.org/helppc/int_13-8.html)
+    - [X] [Check present extensions](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present)
     - [ ] [Read disk sectors](https://stanislavs.org/helppc/int_13-2.html)
     - [ ] [Extended read disk sectors](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive)
 - [ ] Chainload protocol function
