@@ -16,34 +16,17 @@ _start:
 	mov al, 0x03
 	int 0x10
 	cmp al, 0x30
-	je _start.next
-
-	// Print error message
-	mov si, offset _start.str_0
-	call puts
-	cli
-	hlt
-
-_start.next:
-	// Enable line A20
-	call a20_init
+	jne $
 
 	// Enter protected mode
 	lgdt [gdt.desc]
 	mov eax, cr0
 	or eax, 0x01
 	mov cr0, eax
-	jmp 0x08:entry
+	jmp 0x18:entry
 
-_start.str_0:
-	.asciz "Initializing video mode failed!\n\r"
-
-.include "puts.inc"
-.include "a20.inc"
 .include "gdt.inc"
-
 .code32
-.section .text
 
 entry:
 	// Initialize registers
@@ -55,7 +38,7 @@ entry:
 	mov fs, ax
 	mov gs, ax
 
-	mov ax, 0x10
+	mov ax, 0x20
 	mov ds, ax
 	mov ss, ax
 

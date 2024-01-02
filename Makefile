@@ -1,6 +1,3 @@
-include ${TOOLCHAIN}
-INCLUDE ?= /usr/lib/gcc/*/*/include/
-
 .PHONY: build clean
 build: build/stage1.bin build/stage2.bin
 

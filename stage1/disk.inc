@@ -176,7 +176,7 @@ disk_read_0x02.done:
 	disk_info.booting:    .space 0x01
 .section .text
 
-// Reads sectors from disk
+// Reads sectors from disk using int 0x13, ah=0x42
 // Parameters:
 //   eax   - LBA low pointing to the beginning of the data
 //   ebx   - Address of buffer [offset 16] [segment 16]

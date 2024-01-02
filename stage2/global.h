@@ -1,5 +1,4 @@
 #pragma once
-#include <stdint.h>
 
 #define __packed __attribute__((packed))
 #define __cdecl  __attribute__((cdecl))
