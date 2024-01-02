@@ -9,9 +9,20 @@ typedef enum {
 } disk_extension_t;
 
 typedef struct {
+	uint8_t size;
+	uint8_t reserved;
+	uint16_t sectors;
+	uint32_t buffer;
+	uint64_t address;
+} disk_packet_t;
+
+typedef struct {
 	uint8_t id;
 	uint8_t extensions;
+	uint16_t cylinders;
+	uint8_t heads;
+	uint8_t sectors;
 } disk_t;
 
 bool disk_init(disk_t *self, uint8_t id);
-void disk_read(disk_t self, uint32_t base, uint16_t size, void *buffer);
+uint16_t disk_read(disk_t self, uint32_t address, uint16_t sectors, void *buffer);

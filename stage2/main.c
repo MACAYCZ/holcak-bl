@@ -19,15 +19,18 @@ void puts(const char *string)
 
 __cdecl noreturn void main(void)
 {
-	for (size_t i = 0; i <= UINT8_MAX; i++) {
-		disk_t disk;
-		if (!disk_init(&disk, i)) continue;
-
-		putc('0' + (disk.id >> 0x04));
-		putc('0' + (disk.id & 0x0F));
-		putc('=');
-		putc('0' + disk.extensions);
-		putc('\n');
+	disk_t disk;
+	if (!disk_init(&disk, 0x80)) {
+		puts("Error: Could not initialize disk!");
+		while (1);
 	}
+
+	char buffer[512];
+	if (!disk_read(disk, 0, 1, buffer)) {
+		puts("Error: Could not read from disk!");
+		while (1);
+	}
+
+	puts(&buffer[3]);
 	while (1);
 }
