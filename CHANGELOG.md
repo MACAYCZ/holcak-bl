@@ -11,8 +11,8 @@ Support for booting unpartitioned media with the chainload protocol.
     - [ ] GAS macros for entering and leaving 16-bit mode
     - [ ] Function for calling BIOS interrupts from C
 - [ ] Reading sectors from disk using BIOS interrupts
-    - [ ] [https://stanislavs.org/helppc/int_13-8.html](Read disk parameters)
-    - [ ] [https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present](Check present extensions)
-    - [ ] [https://stanislavs.org/helppc/int_13-2.html](Read disk sectors)
-    - [ ] [https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive](Read extended disk sectors)
+    - [ ] (https://stanislavs.org/helppc/int_13-8.html)[Read disk parameters]
+    - [ ] (https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present)[Check present extensions]
+    - [ ] (https://stanislavs.org/helppc/int_13-2.html)[Read disk sectors]
+    - [ ] (https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive)[Read extended disk sectors]
 - [ ] Chainload protocol function
