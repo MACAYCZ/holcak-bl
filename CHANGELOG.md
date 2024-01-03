@@ -14,3 +14,7 @@ Support for booting unpartitioned media with the chainload protocol.
     - [X] [Read disk sectors](https://stanislavs.org/helppc/int_13-2.html)
     - [X] [Extended read disk sectors](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=42h:_Extended_Read_Sectors_From_Drive)
 - [ ] Chainload protocol function
+
+### Changed
+- [X] Change the address of stage2 to 0x8000 since the chainload protocol requires overwriting address 0x7C00
+- [X] Stage1 no longer relocating to a lower address due to the change in the stage2 address

@@ -4,13 +4,13 @@ OUTPUT_ARCH(i386)
 
 MEMORY
 {
-	RAM(RWX) : ORIGIN = 0x0500, LENGTH = 0x7700
 	ROM(RX)  : ORIGIN = 0x7C00, LENGTH = 0x0200
+	RAM(RWX) : ORIGIN = 0x7E00, LENGTH = 0x0781FF
 }
 
 SECTIONS
 {
-	. = 0x0500;
+	. = 0x7C00;
 	__start = .;
 
 	.text :

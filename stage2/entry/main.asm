@@ -8,7 +8,7 @@
 
 _start:
 	// Initialize registers
-	mov ebp, 0x1000
+	mov ebp, 0x8000
 	mov esp, ebp
 
 	// Set video mode
@@ -42,20 +42,11 @@ entry:
 	mov ds, ax
 	mov ss, ax
 
-	// Initialize stack
-	mov ebp, offset stack + offset stack_size
-	mov esp, ebp
-
 	// Zero out bss section
 	mov edi, __bss_start
 	mov ecx, __bss_end
 	sub ecx, edi
-
 	xor al, al
 	rep stosb
 
 	jmp main
-
-.section .bss
-	stack: .space stack_size
-	stack_size = 0x2000

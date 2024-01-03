@@ -46,15 +46,6 @@ main:
 	mov sp, 0x1000
 	mov bp, sp
 
-	// Relocate to lower address
-	cld
-	mov cx, 0x0200
-	mov si, 0x7C00
-	mov di, 0x0500
-	rep movsb
-	jmp 0x0000:main.load
-
-main.load:
 	// Load stage2 into memory
 	call disk_init
 	mov eax, [stage2.address.lo]
@@ -69,7 +60,7 @@ main.load:
 	stage2.address.lo: .long 0x00
 	stage2.address.hi: .word 0x00
 	stage2.sectors:    .word 0x00
-	stage2.buffer        = 0x1000
+	stage2.buffer        = 0x8000
 
 .zero 0x01FE - (. - _start)
 .word 0xAA55
