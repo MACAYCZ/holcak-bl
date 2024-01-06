@@ -43,7 +43,7 @@ main:
 	mov ds, ax
 	mov es, ax
 	mov ss, ax
-	mov sp, 0x1000
+	mov sp, 0x7C00
 	mov bp, sp
 
 	// Load stage2 into memory

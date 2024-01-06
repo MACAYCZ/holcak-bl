@@ -38,7 +38,6 @@ x86_16_int.real:
 	mov eax, cr0
 	and al, 0xFE
 	mov cr0, eax
-
 	jmp 0x00:x86_16_int.zero
 
 x86_16_int.zero:

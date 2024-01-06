@@ -23,12 +23,12 @@ _start:
 	mov eax, cr0
 	or eax, 0x01
 	mov cr0, eax
-	jmp 0x18:entry
+	jmp 0x18:_start.next
 
 .include "gdt.inc"
 .code32
 
-entry:
+_start.next:
 	// Initialize registers
 	cli
 	cld

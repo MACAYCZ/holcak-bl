@@ -1,3 +1,4 @@
+#include <stage2/protocol/chainload.h>
 #include <stage2/driver/x86_16.h>
 #include <stage2/driver/disk.h>
 #include <stage2/global.h>
@@ -19,18 +20,15 @@ void puts(const char *string)
 
 __cdecl noreturn void main(void)
 {
+	puts("Hello, World!\n\r");
+
 	disk_t disk;
 	if (!disk_init(&disk, 0x80)) {
 		puts("Error: Could not initialize disk!");
 		while (1);
 	}
 
-	char buffer[512];
-	if (!disk_read(disk, 0, 1, buffer)) {
-		puts("Error: Could not read from disk!");
-		while (1);
-	}
-
-	puts(&buffer[3]);
+	chainload(disk);
+	puts("Error: Could not chainload!");
 	while (1);
 }
