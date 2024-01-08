@@ -101,14 +101,12 @@ x86_16_int.done:
 	.code32
 
 	// Restore segment registers
-	xor ax, ax
-	mov es, ax
-	mov fs, ax
-	mov gs, ax
-
 	mov ax, 0x20
 	mov ds, ax
 	mov ss, ax
+	mov es, ax
+	mov fs, ax
+	mov gs, ax
 
 	// Restore non-scratch GPRs
 	pop ebp

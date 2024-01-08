@@ -24,12 +24,24 @@ chainload_jump.real:
 
 chainload_jump.zero:
 	// Initialize registers
-	xor ax, ax
+	xor eax, eax
+	xor ebx, ebx
+	xor ecx, ecx
+	and edx, 0xFF
+	xor esi, esi
+	xor edi, edi
+
+	mov ss, ax
 	mov ds, ax
 	mov es, ax
 	mov fs, ax
 	mov gs, ax
 
+	// Clear flags
+	pushd 0x00
+	popfd
+
+	// Initialize stack
 	mov esp, 0x7C00
 	mov ebp, esp
 

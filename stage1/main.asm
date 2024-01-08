@@ -1,7 +1,7 @@
 .intel_syntax noprefix
 .code16
 
-.section .text
+.section .entry
 .global _start
 
 _start:
@@ -33,6 +33,7 @@ _start:
 	bpb.volume_label:         .ascii "HOLCAK     "
 	bpb.file_system_type:     .zero 0x08
 
+.section .text
 .include "puts.inc"
 .include "disk.inc"
 
@@ -56,11 +57,8 @@ main:
 
 	jmp stage2.buffer
 
-.zero 0x01B0 - (. - _start)
+.section .args
 	stage2.address.lo: .long 0x00
 	stage2.address.hi: .word 0x00
 	stage2.sectors:    .word 0x00
 	stage2.buffer        = 0x8000
-
-.zero 0x01FE - (. - _start)
-.word 0xAA55

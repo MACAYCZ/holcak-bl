@@ -9,6 +9,7 @@ void putc(char letter)
 	x86_16_regs_t input = {
 		.eax = 0x0E00 | letter,
 	};
+
 	x86_16_regs_t output;
 	x86_16_int(0x10, &input, &output);
 }
@@ -23,12 +24,15 @@ __cdecl noreturn void main(void)
 	puts("Hello, World!\n\r");
 
 	disk_t disk;
-	if (!disk_init(&disk, 0x80)) {
-		puts("Error: Could not initialize disk!");
+	if (!disk_init(&disk, 0x00)) {
+		puts("ERROR: Could not initialize disk!");
 		while (1);
 	}
 
-	chainload(disk);
-	puts("Error: Could not chainload!");
-	while (1);
+	if (!chainload_load(disk)) {
+		puts("ERROR: Could not chainload!");
+		while (1);
+	}
+
+	chainload_jump(disk.id);
 }
