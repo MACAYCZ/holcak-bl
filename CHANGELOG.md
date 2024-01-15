@@ -12,9 +12,6 @@ Minor fixes and changes for the previous version.
     - [X] In function `x86_16_int`
 
 ### Changed
-- [ ] Function `x86_16_int`
-    - [ ] Returns output registers instead of taking them as an argument
-    - [ ] Takes copy of input registers instead of taking them as a pointer
 - [X] Split function `chainload` to `chainload_load` and `chainload_jump`
 - [X] No longer rely on `.zero` in stage1, instead use `.section`
 

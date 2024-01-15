@@ -21,8 +21,6 @@ void puts(const char *string)
 
 __cdecl noreturn void main(void)
 {
-	puts("Hello, World!\n\r");
-
 	disk_t disk;
 	if (!disk_init(&disk, 0x00)) {
 		puts("ERROR: Could not initialize disk!");
