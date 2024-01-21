@@ -3,8 +3,28 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+User interface for selecting boot device.
+
+### Added
+- [ ] Inteface for the VGA text mode
+    - [X] Clearing screen
+    - [X] [Changing cursor visibility](https://wiki.osdev.org/Text_Mode_Cursor#Enabling_the_Cursor_2)
+    - [X] [Changing cursor position](https://wiki.osdev.org/Text_Mode_Cursor#Moving_the_Cursor_2)
+    - [X] Printing character on the screen
+    - [ ] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implemetation
+- [ ] Selection menu for all bootable devices
+    - [ ] Keyboard driver
+        - [ ] IDT driver
+        - [ ] PIC driver
+    - [ ] Render all bootable devices
+- [ ] Reading volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
+
+### Fixed
+- [X] Fixed vim highlighting in assembly files by adding `vim: ft=asm` at the beginning of each file
+
 ## [0.1.1] - 2024-01-15
-Minor fixes and changes for the previous version.
+Patch for the previous minor version.
 
 ### Fixed
 - [X] Fixed values of segment registers in 32-bit mode

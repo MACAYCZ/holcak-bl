@@ -1,9 +1,10 @@
+// vim: ft=asm
 .intel_syntax noprefix
+.code16
 
 .global _start
 .extern main
 
-.code16
 .section .entry
 
 _start:

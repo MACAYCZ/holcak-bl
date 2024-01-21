@@ -1,26 +1,22 @@
 #include <stage2/protocol/chainload.h>
+#include <stage2/interface/console.h>
 #include <stage2/driver/x86_16.h>
 #include <stage2/driver/disk.h>
 #include <stage2/global.h>
 #include <stdnoreturn.h>
 
-void putc(char letter)
-{
-	x86_16_regs_t input = {
-		.eax = 0x0E00 | letter,
-	};
-
-	x86_16_regs_t output;
-	x86_16_int(0x10, &input, &output);
-}
-
 void puts(const char *string)
 {
-	for (; *string; putc(*string++));
+	for (; *string; console_print(*string++, CONSOLE_DEFAULT));
 }
 
 __cdecl noreturn void main(void)
 {
+	console_init();
+	puts("Hello, World!\n");
+	console_flush();
+	while (1);
+
 	disk_t disk;
 	if (!disk_init(&disk, 0x00)) {
 		puts("ERROR: Could not initialize disk!");

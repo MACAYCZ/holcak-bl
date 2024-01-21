@@ -1,3 +1,4 @@
+// vim: ft=asm
 .intel_syntax noprefix
 .code16
 
@@ -135,6 +136,8 @@ disk_read_0x02.retry:
 
 	int 0x13
 	jc disk_read_0x02.error
+	test al, al
+	jz disk_read_0x02.error
 
 	xor ecx, ecx
 	mov cl, al

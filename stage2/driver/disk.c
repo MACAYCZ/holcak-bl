@@ -58,40 +58,40 @@ uint16_t disk_read(disk_t self, uint32_t address, uint16_t sectors, void *buffer
 			return 0x00;
 		}
 		return sectors;
-	} else {
-		size_t i = 0;
-		while (i < sectors) {
-			for (size_t j = 0; ; j++) {
-				x86_16_regs_t input = {
-					.eax = 0x0200 | MIN(sectors - i, 128),
-					.ebx = x86_16_OFFSET(buffer),
-					.ecx = (((address + i) % self.sectors + 1) & 0x3F) | (((address + i) / self.sectors / self.heads) << 0x06),
-					.edx = ((address + i) / self.sectors % self.heads) << 0x08 | self.id,
-					.es = x86_16_SEGMENT(buffer),
-				};
-
-				x86_16_regs_t output;
-				x86_16_int(0x13, &input, &output);
-
-				if (output.eflags & x86_FLAGS_CARRY) {
-					if (j == 5) return i;
-					input = (x86_16_regs_t){
-						.eax = 0x00,
-						.edx = self.id,
-					};
-					x86_16_int(0x13, &input, &output);
-
-					if (output.eflags & x86_FLAGS_CARRY) {
-						return i;
-					}
-					continue;
-				}
-
-				i += output.eax & 0x0F;
-				break;
-			}
-		}
-		return i;
 	}
-	__builtin_unreachable();
+	size_t read = 0;
+	for (size_t retry = 0; read < sectors && retry < 5; read++) {
+		uint16_t cylinder = (address + read) / self.sectors / self.heads;
+		uint8_t head = (address + read) / self.sectors % self.heads;
+		uint8_t sector = (address + read) % self.sectors + 1;
+
+		x86_16_regs_t input = {
+			.eax = 0x0200 | MIN(sectors - read, 128),
+			.ebx = x86_16_OFFSET(buffer),
+			.ecx = (sector & 0x3F) | (cylinder << 0x06),
+			.edx = head << 0x08 | self.id,
+			.es = x86_16_SEGMENT(buffer),
+		};
+
+		x86_16_regs_t output;
+		x86_16_int(0x13, &input, &output);
+
+		if (output.eflags & x86_FLAGS_CARRY || !(output.eax & 0x0F)) {
+			input = (x86_16_regs_t){
+				.eax = 0x00,
+				.edx = self.id,
+			};
+			x86_16_int(0x13, &input, &output);
+
+			if (output.eflags & x86_FLAGS_CARRY) {
+				return read;
+			}
+			retry++;
+			continue;
+		}
+
+		read += output.eax & 0x0F;
+		retry = 0;
+	}
+	return read;
 }
