@@ -2,7 +2,8 @@
 #include <stage2/driver/port.h>
 #include "console.h"
 
-static uint16_t console_cursor = 0;
+uint16_t console_cursor = 0;
+uint8_t console_color = CONSOLE_COLOR_DEFAULT;
 
 void console_init(void)
 {
@@ -13,11 +14,13 @@ void console_init(void)
 	x86_16_int(0x10, &input, &output);
 
 	console_cursor_show(CONSOLE_CURSOR_UNDERLINE);
+	console_clear();
+	console_flush();
 }
 
-void console_print(char chr, uint8_t color)
+void console_print(char character)
 {
-	if (chr == '\n') {
+	if (character == '\n') {
 		if (console_cursor >= (CONSOLE_ROWS - 1) * CONSOLE_COLS) {
 			console_cursor = (CONSOLE_ROWS - 1) * CONSOLE_COLS;
 			console_scroll(1);
@@ -25,20 +28,24 @@ void console_print(char chr, uint8_t color)
 			console_cursor = (console_cursor + CONSOLE_COLS - 1) / CONSOLE_COLS * CONSOLE_COLS;
 		}
 	} else {
-		CONSOLE_TEXT[console_cursor] = (color << 0x08) | chr;
+		CONSOLE_TEXT[console_cursor] = (console_color << 0x08) | character;
 		console_cursor += 1;
 	}
 }
 
 void console_flush(void)
 {
-	console_cursor_set(console_cursor);
+	port8_out(0x03D4, 0x0F);
+	port8_out(0x03D5, console_cursor >> 0x00);
+
+	port8_out(0x03D4, 0x0E);
+	port8_out(0x03D5, console_cursor >> 0x08);
 }
 
 void console_clear(void)
 {
 	for (size_t i = 0; i < CONSOLE_ROWS * CONSOLE_COLS; i++) {
-		CONSOLE_TEXT[i] = CONSOLE_DEFAULT | ' ';
+		CONSOLE_TEXT[i] = (console_color << 0x08) | ' ';
 	}
 	console_cursor = 0;
 }
@@ -49,23 +56,8 @@ void console_scroll(uint8_t rows)
 		CONSOLE_TEXT[i - rows * CONSOLE_COLS] = CONSOLE_TEXT[i];
 	}
 	for (size_t i = CONSOLE_ROWS * CONSOLE_COLS - rows * CONSOLE_COLS; i < rows * CONSOLE_COLS; i++) {
-		CONSOLE_TEXT[i] = CONSOLE_DEFAULT | ' ';
+		CONSOLE_TEXT[i] = (console_color << 0x08 | ' ');
 	}
-}
-
-void console_cursor_set(uint16_t cursor)
-{
-	console_cursor = cursor;
-	port8_out(0x03D4, 0x0F);
-	port8_out(0x03D5, cursor >> 0x00);
-
-	port8_out(0x03D4, 0x0E);
-	port8_out(0x03D5, cursor >> 0x08);
-}
-
-uint16_t console_cursor_get(void)
-{
-	return console_cursor;
 }
 
 void console_cursor_show(uint8_t shape)

@@ -7,14 +7,15 @@
 
 void puts(const char *string)
 {
-	for (; *string; console_print(*string++, CONSOLE_DEFAULT));
+	for (; *string; console_print(*string++));
+	console_flush();
 }
 
 __cdecl noreturn void main(void)
 {
+	console_color = CONSOLE_COLOR(CONSOLE_RED, CONSOLE_GREEN);
 	console_init();
 	puts("Hello, World!\n");
-	console_flush();
 	while (1);
 
 	disk_t disk;

@@ -17,11 +17,12 @@ User interface for selecting boot device.
     - [ ] Keyboard driver
         - [ ] IDT driver
         - [ ] PIC driver
+        - [ ] Keyboard handle
     - [ ] Render all bootable devices
 - [ ] Reading volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
 
 ### Fixed
-- [X] Fixed vim highlighting in assembly files by adding `vim: ft=asm` at the beginning of each file
+- [X] Fixed vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
 
 ## [0.1.1] - 2024-01-15
 Patch for the previous minor version.
