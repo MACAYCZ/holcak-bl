@@ -7,28 +7,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 User interface for selecting boot device.
 
 ### Added
-- [ ] Inteface for the VGA text mode
+- [ ] Interface for the VGA text mode
     - [X] Clearing screen
     - [X] [Changing cursor visibility](https://wiki.osdev.org/Text_Mode_Cursor#Enabling_the_Cursor_2)
     - [X] [Changing cursor position](https://wiki.osdev.org/Text_Mode_Cursor#Moving_the_Cursor_2)
     - [X] Printing character on the screen
-    - [ ] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implemetation
+    - [ ] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implementation
 - [ ] Selection menu for all bootable devices
     - [ ] Keyboard driver
         - [ ] IDT driver
         - [ ] PIC driver
         - [ ] Keyboard handle
     - [ ] Render all bootable devices
-- [ ] Reading volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
+- [X] Read volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
 
 ### Fixed
-- [X] Fixed vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
+- [X] Fix vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
+
+### Changed
+- [X] Rename `chainload_load` to `chainload_init` to be more consistent
 
 ## [0.1.1] - 2024-01-15
 Patch for the previous minor version.
 
 ### Fixed
-- [X] Fixed values of segment registers in 32-bit mode
+- [X] Fix values of segment registers in 32-bit mode
     - [X] In function `_start`
     - [X] In function `x86_16_int`
 
@@ -41,7 +44,7 @@ Support for booting unpartitioned media with the chainload protocol.
 
 ### Added
 - [X] Function for calling BIOS interrupts from C
-- [X] Reading sectors from disk using BIOS interrupts
+- [X] Read sectors from disk using BIOS interrupts
     - [X] [Read disk parameters](https://stanislavs.org/helppc/int_13-8.html)
     - [X] [Check present extensions](https://en.wikipedia.org/wiki/INT_13H#INT_13h_AH=41h:_Check_Extensions_Present)
     - [X] [Read disk sectors](https://stanislavs.org/helppc/int_13-2.html)
