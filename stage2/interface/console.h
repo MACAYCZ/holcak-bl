@@ -38,7 +38,7 @@ extern uint16_t console_cursor;
 extern uint8_t console_color;
 
 void console_init(void);
-void console_print(char character);
+void console_print(char chr);
 void console_flush(void);
 void console_clear(void);
 void console_scroll(uint8_t rows);

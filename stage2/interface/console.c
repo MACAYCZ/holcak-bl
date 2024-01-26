@@ -18,9 +18,9 @@ void console_init(void)
 	console_flush();
 }
 
-void console_print(char character)
+void console_print(char chr)
 {
-	if (character == '\n') {
+	if (chr == '\n') {
 		if (console_cursor >= (CONSOLE_ROWS - 1) * CONSOLE_COLS) {
 			console_cursor = (CONSOLE_ROWS - 1) * CONSOLE_COLS;
 			console_scroll(1);
@@ -28,7 +28,7 @@ void console_print(char character)
 			console_cursor = (console_cursor + CONSOLE_COLS - 1) / CONSOLE_COLS * CONSOLE_COLS;
 		}
 	} else {
-		CONSOLE_TEXT[console_cursor] = (console_color << 0x08) | character;
+		CONSOLE_TEXT[console_cursor] = (console_color << 0x08) | chr;
 		console_cursor += 1;
 	}
 }

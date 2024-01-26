@@ -13,10 +13,7 @@ void puts(const char *string)
 
 __cdecl noreturn void main(void)
 {
-	console_color = CONSOLE_COLOR(CONSOLE_RED, CONSOLE_GREEN);
 	console_init();
-	puts("Hello, World!\n");
-	while (1);
 
 	disk_t disk;
 	if (!disk_init(&disk, 0x00)) {
@@ -24,7 +21,7 @@ __cdecl noreturn void main(void)
 		while (1);
 	}
 
-	if (!chainload_load(disk)) {
+	if (!chainload_init(disk)) {
 		puts("ERROR: Could not chainload!");
 		while (1);
 	}
