@@ -3,22 +3,9 @@
 #include "console.h"
 
 uint16_t console_cursor = 0;
-uint8_t console_color = CONSOLE_COLOR_DEFAULT;
+uint8_t console_color = CONSOLE_COLOR(CONSOLE_LIGHT_GRAY, CONSOLE_BLACK);
 
-void console_init(void)
-{
-	x86_16_regs_t input = {
-		.eax = 0x03,
-	};
-	x86_16_regs_t output;
-	x86_16_int(0x10, &input, &output);
-
-	console_cursor_show(CONSOLE_CURSOR_UNDERLINE);
-	console_clear();
-	console_flush();
-}
-
-void console_print(char chr)
+void putc(char chr)
 {
 	if (chr == '\n') {
 		if (console_cursor >= (CONSOLE_ROWS - 1) * CONSOLE_COLS) {
@@ -33,6 +20,24 @@ void console_print(char chr)
 	}
 }
 
+void puts(const char *str)
+{
+	while (*str) putc(*str++);
+	console_flush();
+}
+
+void console_init(void)
+{
+	x86_16_regs_t regs = {
+		.eax = 0x03,
+	};
+	x86_16_int(0x10, &regs);
+
+	console_cursor_show(CONSOLE_CURSOR_UNDERLINE);
+	console_clear();
+	console_flush();
+}
+
 void console_flush(void)
 {
 	port8_out(0x03D4, 0x0F);
@@ -44,6 +49,7 @@ void console_flush(void)
 
 void console_clear(void)
 {
+
 	for (size_t i = 0; i < CONSOLE_ROWS * CONSOLE_COLS; i++) {
 		CONSOLE_TEXT[i] = (console_color << 0x08) | ' ';
 	}

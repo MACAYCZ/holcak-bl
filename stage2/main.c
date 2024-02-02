@@ -2,14 +2,27 @@
 #include <stage2/interface/console.h>
 #include <stage2/driver/x86_16.h>
 #include <stage2/driver/disk.h>
+#include <stage2/driver/idt.h>
 #include <stage2/global.h>
 #include <stdnoreturn.h>
 
-void puts(const char *string)
+typedef struct __packed {
+	uint32_t eip;
+	uint32_t cs;
+	uint32_t eflags;
+	uint32_t sp;
+	uint32_t ss;
+} int_frame_32_t;
+
+#pragma GCC push_options
+#pragma GCC target("general-regs-only")
+__interrupt void foo(int_frame_32_t *frame)
 {
-	for (; *string; console_print(*string++));
-	console_flush();
+	(void)frame;
+	puts("Exception: Division Error!");
+	while (1);
 }
+#pragma GCC pop_options
 
 __cdecl noreturn void main(void)
 {

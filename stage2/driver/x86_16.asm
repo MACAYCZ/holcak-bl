@@ -1,9 +1,9 @@
 // vim: ft=asm
 .intel_syntax noprefix
-.section .text
-
-.global x86_16_int
 .code32
+
+.section .text
+.global x86_16_int
 
 // Calls BIOS interrupt from protected mode
 // References:
@@ -15,9 +15,7 @@ x86_16_int:
 
 	// Save address of registers
 	mov eax, [esp+0x08]
-	mov [x86_16_int.input], eax
-	mov eax, [esp+0x0C]
-	mov [x86_16_int.output], eax
+	mov [x86_16_int.regs], eax
 
 	// Save descriptors in case BIOS overwrites them
 	sgdt [x86_16_int.gdt]
@@ -47,7 +45,7 @@ x86_16_int.zero:
 
 	// Load input registers
 	mov ss:[x86_16_int.esp], esp
-	mov esp, ss:[x86_16_int.input]
+	mov esp, ss:[x86_16_int.regs]
 	pop gs
 	pop fs
 	pop es
@@ -60,7 +58,7 @@ x86_16_int.zero:
 	pop ecx
 	pop ebx
 	pop eax
-	mov esp, ss:[x86_16_int.esp]
+//	mov esp, ss:[x86_16_int.esp]
 	sti
 
 	// Make interrupt call
@@ -70,9 +68,9 @@ x86_16_int.int:
 
 	// Save output registers
 	cli
-	mov ss:[x86_16_int.esp], esp
-	mov esp, ss:[x86_16_int.output]
-	lea esp, [esp+0x28]
+//	mov ss:[x86_16_int.esp], esp
+//	mov esp, ss:[x86_16_int.output]
+//	lea esp, [esp+0x28]
 	push eax
 	push ebx
 	push ecx
@@ -127,10 +125,7 @@ x86_16_int.gdt:
 x86_16_int.idt:
 	.quad 0x00
 
-x86_16_int.input:
-	.long 0x00
-
-x86_16_int.output:
+x86_16_int.regs:
 	.long 0x00
 
 x86_16_int.esp:

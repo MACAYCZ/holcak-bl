@@ -2,19 +2,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-typedef enum {
-	DISK_EXTENSION_PACKET_STRUCTURE = 0x01,
-	DISK_EXTENSION_LOCKING_AND_EJECTING = 0x02,
-	DISK_EXTENSION_ENHANCED_DISK_DRIVE = 0x04,
-} disk_extension_t;
-
-typedef struct {
-	uint8_t size;
-	uint8_t reserved;
-	uint16_t sectors;
-	uint32_t buffer;
-	uint64_t address;
-} disk_packet_t;
+#define DISK_EXTENSION_PACKET_STRUCTURE     0x01
+#define DISK_EXTENSION_LOCKING_AND_EJECTING 0x02
+#define DISK_EXTENSION_ENHANCED_DISK_DRIVE  0x04
 
 typedef struct {
 	uint8_t id;

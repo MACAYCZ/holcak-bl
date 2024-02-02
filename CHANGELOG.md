@@ -15,8 +15,8 @@ User interface for selecting boot device.
     - [ ] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implementation
 - [ ] Selection menu for all bootable devices
     - [ ] Keyboard driver
-        - [ ] IDT driver
-        - [ ] PIC driver
+        - [X] [IDT](https://wiki.osdev.org/Interrupt_Descriptor_Table) driver
+        - [ ] [PIC](https://wiki.osdev.org/8259_PIC) driver
         - [ ] Keyboard handle
     - [ ] Render all bootable devices
 - [X] Read volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
@@ -26,6 +26,7 @@ User interface for selecting boot device.
 
 ### Changed
 - [X] Rename `chainload_load` to `chainload_init` to be more consistent
+- [X] Mix input and output registers to a single argument in function `x86_16_int`
 
 ## [0.1.1] - 2024-01-15
 Patch for the previous minor version.

@@ -29,3 +29,8 @@ uint32_t port32_in(uint16_t id) {
 void port32_out(uint16_t id, uint32_t value) {
 	__asm__ volatile ("outl %%eax, %%dx" : : "a"(value), "d"(id));
 }
+
+void port_wait(void)
+{
+	port8_out(PORT_UNUSED, 0x00);
+}
