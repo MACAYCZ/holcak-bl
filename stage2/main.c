@@ -1,32 +1,79 @@
 #include <stage2/protocol/chainload.h>
 #include <stage2/interface/console.h>
+#include <stage2/library/string.h>
 #include <stage2/driver/x86_16.h>
 #include <stage2/driver/disk.h>
-#include <stage2/driver/idt.h>
+#include <stage2/driver/port.h>
 #include <stage2/global.h>
 #include <stdnoreturn.h>
 
-typedef struct __packed {
-	uint32_t eip;
-	uint32_t cs;
-	uint32_t eflags;
-	uint32_t sp;
-	uint32_t ss;
-} int_frame_32_t;
+typedef struct {
+	struct {
+		disk_t disk;
+		char name[13];
+	} items[16];
+	size_t size;
+	size_t render;
+	size_t cursor;
+} menu_t;
 
-#pragma GCC push_options
-#pragma GCC target("general-regs-only")
-__interrupt void foo(int_frame_32_t *frame)
-{
-	(void)frame;
-	puts("Exception: Division Error!");
-	while (1);
-}
-#pragma GCC pop_options
+// TODO: `console_init` does not return on real hardware!
 
 __cdecl noreturn void main(void)
 {
 	console_init();
+	puts("Hello, World!\n");
+	while (1);
+
+	/*
+	console_init();
+	puts("Hello, World!\n");
+	while (1);
+
+	menu_t menu = {0};
+	for (size_t i = 0x00; i < 0xFF; i++) {
+		if (!disk_init(&menu.items[menu.size].disk, i)) {
+			continue;
+		}
+		if (chainload_init(menu.items[menu.size].disk)) {
+			if (!chainload_name(menu.items[menu.size].name)) {
+				memcpy(menu.items[menu.size].name, "Unknown", 7);
+			}
+			if (++menu.size > sizeof(menu.items) / sizeof(menu.items[0])) {
+				puts("ERROR: Unable to load all bootable devices!\n");
+				goto skip;
+			}
+		}
+	}
+skip:
+
+	for (size_t i = 0; i < menu.size; i++) {
+		for (size_t j = 0; j < 13; putc(menu.items[i].name[j++]));
+		putc('\n');
+		console_flush();
+	}
+
+	while (1);
+*/
+/*
+	while (1) {
+		switch (port8_in(0x60)) {
+		case 0xE0:
+			switch (port8_in(0x60)) {
+			case 0x48:
+				puts("Arrow up!\n");
+				break;
+			case 0x50:
+				puts("Arrow down!\n");
+				break;
+			}
+			break;
+		case 0x1C:
+			puts("Enter!\n");
+			break;
+		}
+	}
+*/
 
 	disk_t disk;
 	if (!disk_init(&disk, 0x00)) {

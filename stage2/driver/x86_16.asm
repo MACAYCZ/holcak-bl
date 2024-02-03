@@ -58,7 +58,6 @@ x86_16_int.zero:
 	pop ecx
 	pop ebx
 	pop eax
-//	mov esp, ss:[x86_16_int.esp]
 	sti
 
 	// Make interrupt call
@@ -68,9 +67,6 @@ x86_16_int.int:
 
 	// Save output registers
 	cli
-//	mov ss:[x86_16_int.esp], esp
-//	mov esp, ss:[x86_16_int.output]
-//	lea esp, [esp+0x28]
 	push eax
 	push ebx
 	push ecx

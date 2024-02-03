@@ -9,7 +9,7 @@
 
 _start:
 	// Initialize registers
-	mov ebp, 0x8000
+	mov ebp, 0x7C00
 	mov esp, ebp
 
 	// Enter protected mode

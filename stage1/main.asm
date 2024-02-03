@@ -29,7 +29,7 @@ _start:
 
 	bpb.drive_number:         .byte 0x00
 	bpb.flags:                .byte 0x00
-	bpb.boot_signature:       .byte 0x00
+	bpb.boot_signature:       .byte 0x29
 	bpb.volume_serial_number: .long 0x00
 	bpb.volume_label:         .ascii "HOLCAK     "
 	bpb.file_system_type:     .zero 0x08

@@ -15,14 +15,13 @@ User interface for selecting boot device.
     - [ ] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implementation
 - [ ] Selection menu for all bootable devices
     - [ ] Keyboard driver
-        - [X] [IDT](https://wiki.osdev.org/Interrupt_Descriptor_Table) driver
-        - [ ] [PIC](https://wiki.osdev.org/8259_PIC) driver
-        - [ ] Keyboard handle
     - [ ] Render all bootable devices
 - [X] Read volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
 
 ### Fixed
 - [X] Fix vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
+- [X] Fix bug in `console_scroll`
+- [ ] Fix `console_init` does not return on real hardware from the `x86_16_int`
 
 ### Changed
 - [X] Rename `chainload_load` to `chainload_init` to be more consistent

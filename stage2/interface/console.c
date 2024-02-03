@@ -61,7 +61,7 @@ void console_scroll(uint8_t rows)
 	for (size_t i = rows * CONSOLE_COLS; i < CONSOLE_ROWS * CONSOLE_COLS; i++) {
 		CONSOLE_TEXT[i - rows * CONSOLE_COLS] = CONSOLE_TEXT[i];
 	}
-	for (size_t i = CONSOLE_ROWS * CONSOLE_COLS - rows * CONSOLE_COLS; i < rows * CONSOLE_COLS; i++) {
+	for (size_t i = CONSOLE_ROWS * CONSOLE_COLS - rows * CONSOLE_COLS; i < CONSOLE_ROWS * CONSOLE_COLS; i++) {
 		CONSOLE_TEXT[i] = (console_color << 0x08 | ' ');
 	}
 }
