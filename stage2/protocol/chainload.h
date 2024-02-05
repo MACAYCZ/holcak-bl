@@ -10,5 +10,5 @@
 #define CHAINLOAD_SIGNATURE 0xAA55
 
 bool chainload_init(disk_t disk);
-bool chainload_name(char *buffer);
+bool chainload_name(char buffer[13]);
 __asmcall noreturn void chainload_jump(uint8_t disk);

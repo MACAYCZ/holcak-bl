@@ -196,11 +196,11 @@ disk_read_0x42:
 	movb [disk_packet.reserved], 0x00
 	mov  [disk_packet.sectors],  si
 	mov  [disk_packet.buffer],   ebx
-	mov  [disk_packet.lba.lo],   eax
-	mov  [disk_packet.lba.hi],   cx
+	mov  [disk_packet.lba.low],  eax
+	mov  [disk_packet.lba.high], cx
 
 	xor cx, cx
-	mov [disk_packet.lba.hi+0x02], cx
+	mov [disk_packet.lba.high+0x02], cx
 
 	mov si, offset disk_packet
 	mov ah, 0x42
@@ -220,7 +220,7 @@ disk_read_0x42.error:
 	disk_packet.reserved: .space  0x01
 	disk_packet.sectors:  .space  0x02
 	disk_packet.buffer:   .space  0x04
-	disk_packet.lba.lo:   .space  0x04
-	disk_packet.lba.hi:   .space  0x04
+	disk_packet.lba.low:  .space  0x04
+	disk_packet.lba.high: .space  0x04
 	disk_packet_size = . - disk_packet
 .section .text

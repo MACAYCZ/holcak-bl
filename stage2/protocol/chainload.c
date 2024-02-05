@@ -14,7 +14,7 @@ bool chainload_init(disk_t disk)
 	return true;
 }
 
-bool chainload_name(char *buffer)
+bool chainload_name(char buffer[13])
 {
 	if (*(uint8_t*)0x7C26 == 0x29) {
 		memcpy(buffer, (char*)0x7C2B, 11);

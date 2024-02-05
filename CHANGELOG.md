@@ -19,25 +19,25 @@ User interface for selecting boot device.
 - [X] Read volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
 
 ### Fixed
-- [X] Fix vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
-- [X] Fix bug in `console_scroll`
-- [ ] Fix `console_init` does not return on real hardware from the `x86_16_int`
+- [X] Fixed vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
+- [X] Fixed bug in `console_scroll` where last row wasn't clearing
+- [X] Fixed bug in `x86_16_int` where memory was overwritten by an BIOS interrupt because of bad address in `esp`
 
 ### Changed
-- [X] Rename `chainload_load` to `chainload_init` to be more consistent
-- [X] Mix input and output registers to a single argument in function `x86_16_int`
+- [X] Renamed `chainload_load` to `chainload_init` to be more consistent
+- [X] Mixed input and output registers together in the `x86_16_int` function
 
 ## [0.1.1] - 2024-01-15
 Patch for the previous minor version.
 
 ### Fixed
-- [X] Fix values of segment registers in 32-bit mode
+- [X] Fixed values of segment registers in 32-bit mode
     - [X] In function `_start`
     - [X] In function `x86_16_int`
 
 ### Changed
-- [X] Split function `chainload` to `chainload_load` and `chainload_jump`
-- [X] No longer rely on `.zero` in stage1, instead use `.section`
+- [X] Splitted function `chainload` to `chainload_load` and `chainload_jump`
+- [X] No longer relying on `.zero` in stage1, instead use `.section`
 
 ## [0.1.0] - 2024-01-06
 Support for booting unpartitioned media with the chainload protocol.
@@ -52,5 +52,5 @@ Support for booting unpartitioned media with the chainload protocol.
 - [X] Chainload protocol function
 
 ### Changed
-- [X] Change the address of stage2 to 0x8000 since the chainload protocol is using 512 bytes at address 0x7C00
+- [X] Changed address of the stage2 to 0x8000 since the chainload protocol is using 512 bytes at address 0x7C00
 - [X] Remove relocation of stage1 to a lower address due to the change in the stage2 address

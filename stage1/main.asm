@@ -50,8 +50,8 @@ main:
 
 	// Load stage2 into memory
 	call disk_init
-	mov eax, [stage2.address.lo]
-	mov cx,  [stage2.address.hi]
+	mov eax, [stage2.address.low]
+	mov cx,  [stage2.address.high]
 	mov ebx, (stage2.buffer << 0x0C) | (stage2.buffer % 0x10)
 	mov si,  [stage2.sectors]
 	call disk_read
@@ -59,7 +59,7 @@ main:
 	jmp stage2.buffer
 
 .section .args
-	stage2.address.lo: .long 0x00
-	stage2.address.hi: .word 0x00
-	stage2.sectors:    .word 0x00
-	stage2.buffer        = 0x8000
+	stage2.address.low:  .long 0x00
+	stage2.address.high: .word 0x00
+	stage2.sectors:      .word 0x00
+	stage2.buffer            = 0x8000

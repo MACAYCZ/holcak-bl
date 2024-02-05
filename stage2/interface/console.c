@@ -5,27 +5,6 @@
 uint16_t console_cursor = 0;
 uint8_t console_color = CONSOLE_COLOR(CONSOLE_LIGHT_GRAY, CONSOLE_BLACK);
 
-void putc(char chr)
-{
-	if (chr == '\n') {
-		if (console_cursor >= (CONSOLE_ROWS - 1) * CONSOLE_COLS) {
-			console_cursor = (CONSOLE_ROWS - 1) * CONSOLE_COLS;
-			console_scroll(1);
-		} else {
-			console_cursor = (console_cursor + CONSOLE_COLS - 1) / CONSOLE_COLS * CONSOLE_COLS;
-		}
-	} else {
-		CONSOLE_TEXT[console_cursor] = (console_color << 0x08) | chr;
-		console_cursor += 1;
-	}
-}
-
-void puts(const char *str)
-{
-	while (*str) putc(*str++);
-	console_flush();
-}
-
 void console_init(void)
 {
 	x86_16_regs_t regs = {
@@ -36,6 +15,21 @@ void console_init(void)
 	console_cursor_show(CONSOLE_CURSOR_UNDERLINE);
 	console_clear();
 	console_flush();
+}
+
+void console_write(char value)
+{
+	if (value == '\n') {
+		if (console_cursor >= (CONSOLE_ROWS - 1) * CONSOLE_COLS) {
+			console_cursor = (CONSOLE_ROWS - 1) * CONSOLE_COLS;
+			console_scroll(1);
+		} else {
+			console_cursor = (console_cursor + CONSOLE_COLS - 1) / CONSOLE_COLS * CONSOLE_COLS;
+		}
+	} else {
+		CONSOLE_TEXT[console_cursor] = (console_color << 0x08) | value;
+		console_cursor += 1;
+	}
 }
 
 void console_flush(void)
@@ -49,7 +43,6 @@ void console_flush(void)
 
 void console_clear(void)
 {
-
 	for (size_t i = 0; i < CONSOLE_ROWS * CONSOLE_COLS; i++) {
 		CONSOLE_TEXT[i] = (console_color << 0x08) | ' ';
 	}

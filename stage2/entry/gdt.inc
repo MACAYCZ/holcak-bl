@@ -1,6 +1,6 @@
 // vim: ft=asm
 .intel_syntax noprefix
-.code32
+.code16
 
 gdt:
 gdt.null:

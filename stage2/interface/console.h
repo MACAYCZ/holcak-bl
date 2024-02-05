@@ -11,7 +11,7 @@
 #define CONSOLE_COLOR(Foreground, Background) (CONSOLE_FOREGROUND(Foreground) | CONSOLE_BACKGROUND(Background))
 
 #define CONSOLE_CURSOR(Row, Col) ((Col) + (Row) * CONSOLE_COLS)
-#define CONSOLE_CURSOR_BLOCK 0x0F
+#define CONSOLE_CURSOR_BLOCK     0x0F
 #define CONSOLE_CURSOR_UNDERLINE 0xFF
 
 typedef enum {
@@ -36,10 +36,8 @@ typedef enum {
 extern uint16_t console_cursor;
 extern uint8_t console_color;
 
-void putc(char chr);
-void puts(const char *str);
-
 void console_init(void);
+void console_write(char value);
 void console_flush(void);
 void console_clear(void);
 void console_scroll(uint8_t rows);

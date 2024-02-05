@@ -1,5 +1,23 @@
 #include "string.h"
 
+char *strcpy(char *restrict dst, const char *restrict src) {
+	for (size_t i = 0; (dst[i] = src[i]); i++);
+	return dst;
+}
+
+size_t strlen(const char *str) {
+	size_t i;
+	for (i = 0; str[i]; i++);
+	return i;
+}
+
+size_t strnlen_s(const char *str, size_t size)
+{
+	size_t i;
+	for (i = 0; str[i] && i < size; i++);
+	return i;
+}
+
 void *memset(void *dst, int chr, size_t size) {
 	for (size_t i = 0; i < size; i++) {
 		((char*)dst)[i] = chr;

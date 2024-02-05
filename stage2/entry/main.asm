@@ -2,11 +2,10 @@
 .intel_syntax noprefix
 .code16
 
-.global _start
 .extern main
-
 .section .entry
 
+.global _start
 _start:
 	// Initialize registers
 	mov ebp, 0x7C00
