@@ -41,4 +41,7 @@ _start.next:
 	xor al, al
 	rep stosb
 
-	jmp main
+	// Call main with arguments
+	xor dh, dh
+	push dx
+	call main

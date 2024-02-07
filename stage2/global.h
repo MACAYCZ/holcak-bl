@@ -9,5 +9,6 @@
 
 #define MAX(A, B) ((A) > (B) ? (A) : (B))
 #define MIN(A, B) ((A) < (B) ? (A) : (B))
+#define LEN(A) (sizeof(A) / sizeof(*(A)))
 
 typedef ptrdiff_t ssize_t;

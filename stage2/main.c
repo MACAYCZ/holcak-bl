@@ -9,60 +9,77 @@
 #include <stage2/global.h>
 #include <stdnoreturn.h>
 
+#define MENU_DEFAULT_NAME "Unknown"
+
 typedef struct {
 	struct {
 		disk_t disk;
+		char name[13];
 	} items[16];
 	size_t size;
 	size_t cursor;
 	size_t render;
 } menu_t;
 
-__cdecl noreturn void main(void)
+__cdecl noreturn void main(uint8_t boot)
 {
 	console_init();
-//	static menu_t menu;
 
-	/*
-	printf("String %10.*s\n", 5, "World");
-	printf("Dec    %10.5d\n", 1234);
-	printf("Hex    %10.5x\n", 0x1234);
-	printf("Oct    %10.5o\n", 01234);
-	printf("Zero   %10.0d\n", 0);
-	printf("Zero   %10.1d\n", 0);
-	while (1);
-	*/
+	static menu_t menu;
+	for (size_t i = 0; i < 0xFF; i++) {
+		if (menu.size == LEN(menu.items)) {
+			printf("ERROR: Number of bootable devices exceeded the maximum!\n");
+			break;
+		}
+		disk_t *disk = &menu.items[menu.size].disk;
+		if (!disk_init(disk, i)) {
+			continue;
+		}
+		if (boot != i && chainload_init(*disk)) {
+			if (!chainload_name(menu.items[menu.size].name)) {
+				memcpy(menu.items[menu.size].name, MENU_DEFAULT_NAME, sizeof(MENU_DEFAULT_NAME));
+			}
+			menu.size++;
+		}
+	}
+	if (!menu.size) {
+		printf("ERROR: Could not find any bootable device!\n");
+		while (1);
+	}
+	if (menu.size == 1) {
+		chainload_init(menu.items[0].disk);
+		chainload_jump(menu.items[0].disk.id);
+	}
 
-	/*
 	while (1) {
+		console_clear();
+		for (size_t i = menu.render; i < MIN(menu.size, menu.render + CONSOLE_ROWS); i++) {
+			printf("%.13s\n", menu.items[i].name);
+		}
+		console_cursor = (menu.cursor - menu.render) * CONSOLE_COLS;
+		console_flush();
+	keyboard:
 		switch (port8_in(0x60)) {
 		case 0xE0:
 			switch (port8_in(0x60)) {
 			case 0x48:
-				puts("Arrow up!\n");
+				if (menu.cursor) menu.cursor--;
+				if (menu.cursor < menu.render) menu.render = menu.cursor;
 				break;
 			case 0x50:
-				puts("Arrow down!\n");
+				if (menu.cursor < menu.size - 1) menu.cursor++;
+				if (menu.cursor > menu.render + CONSOLE_ROWS) menu.render = menu.cursor;
 				break;
+			default:
+				goto keyboard;
 			}
 			break;
 		case 0x1C:
-			puts("Enter!\n");
-			break;
+			while (port8_in(0x60) == 0x1C);
+			chainload_init(menu.items[menu.cursor].disk);
+			chainload_jump(menu.items[menu.cursor].disk.id);
+		default:
+			goto keyboard;
 		}
 	}
-	*/
-
-	disk_t disk;
-	if (!disk_init(&disk, 0x00)) {
-		printf("ERROR: Could not initialize disk!");
-		while (1);
-	}
-
-	if (!chainload_init(disk)) {
-		printf("ERROR: Could not chainload!");
-		while (1);
-	}
-
-	chainload_jump(disk.id);
 }
