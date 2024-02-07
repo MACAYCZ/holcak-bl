@@ -7,12 +7,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 User interface for selecting boot device.
 
 ### Added
-- [ ] Interface for the VGA text mode
+- [X] Interface for the VGA text mode
     - [X] Clearing screen
     - [X] [Changing cursor visibility](https://wiki.osdev.org/Text_Mode_Cursor#Enabling_the_Cursor_2)
     - [X] [Changing cursor position](https://wiki.osdev.org/Text_Mode_Cursor#Moving_the_Cursor_2)
     - [X] Printing character on the screen
-    - [ ] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implementation
+    - [X] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implementation
 - [ ] Selection menu for all bootable devices
     - [ ] Keyboard driver
     - [ ] Render all bootable devices
@@ -22,10 +22,11 @@ User interface for selecting boot device.
 - [X] Fixed vim highlighting of assembly files by adding `vim: ft=asm` at the beginning of each one
 - [X] Fixed bug in `console_scroll` where last row wasn't clearing
 - [X] Fixed bug in `x86_16_int` where memory was overwritten by an BIOS interrupt because of bad address in `esp`
+- [X] Fixed bug in `disk_read` where number of sectors read was incremented by one even though the operation wasn't successful
 
 ### Changed
 - [X] Renamed `chainload_load` to `chainload_init` to be more consistent
-- [X] Mixed input and output registers together in the `x86_16_int` function
+- [X] Joined input and output registers together in the `x86_16_int` function
 
 ## [0.1.1] - 2024-01-15
 Patch for the previous minor version.

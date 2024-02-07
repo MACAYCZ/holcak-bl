@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include "print.h"
 
+#define putc(Value) console_write(Value)
+
 // TODO: Add to standard headers: https://en.cppreference.com/w/c/string/byte/strtoimax
 static size_t s2u(const char **str)
 {
@@ -15,18 +17,48 @@ static size_t s2u(const char **str)
 	return result;
 }
 
-void putc(char chr)
+static void puts(const char *str, size_t width, size_t precision)
 {
-	console_write(chr);
-	console_flush();
+	size_t size = strnlen_s(str, precision);
+	if (width > size) {
+		for (size_t i = 0; i < width - size; i++, putc(' '));
+	}
+	for (size_t i = 0; i < size; putc(str[i++]));
 }
 
-void puts(const char *str)
+// TODO: Functions `puti` and `putu` are really similar
+static void puti(ssize_t value, size_t width, size_t precision, size_t base)
 {
-	while (*str) {
-		console_write(*str++);
+	if (precision == SIZE_MAX) {
+		precision = 1;
 	}
-	console_flush();
+	if (value || precision) {
+		char buffer[11];
+		strfi(buffer, value, base);
+		size_t size = strlen(buffer);
+		if (width > precision) {
+			for (size_t i = 0; i < width - precision; i++, putc(' '));
+		}
+		for (; size < precision; size++, putc('0'));
+		for (size_t i = 0; i < size; putc(buffer[i++]));
+	}
+}
+
+static void putu(size_t value, size_t width, size_t precision, size_t base)
+{
+	if (precision == SIZE_MAX) {
+		precision = 1;
+	}
+	if (value || precision) {
+		char buffer[11];
+		strfu(buffer, value, base);
+		size_t size = strlen(buffer);
+		if (width > precision) {
+			for (size_t i = 0; i < width - precision; i++, putc(' '));
+		}
+		for (; size < precision; size++, putc('0'));
+		for (size_t i = 0; i < size; putc(buffer[i++]));
+	}
 }
 
 void printf(const char *fmt, ...)
@@ -41,7 +73,7 @@ void vprintf(const char *fmt, va_list args)
 {
 	while (*fmt) {
 		if (*fmt != '%') {
-			console_write(*fmt++);
+			putc(*fmt++);
 			continue;
 		}
 		fmt++;
@@ -71,20 +103,30 @@ void vprintf(const char *fmt, va_list args)
 		// TODO: Length
 		switch (*fmt) {
 		case 'c':
-			console_write(va_arg(args, int));
+			putc(va_arg(args, int));
 			break;
-		case 's': {
-			const char *str = va_arg(args, const char*);
-			size_t size = strnlen_s(str, precision);
-
-			if (width > size) {
-				for (size_t i = 0; i < width - size; i++, console_write(' '));
-			}
-			for (size_t i = 0; i < size; console_write(str[i++]));
+		case 's':
+			puts(va_arg(args, char*), width, precision);
 			break;
-		}
+		case 'd':
+			// TODO: Change to length specified type!
+			puti(va_arg(args, ssize_t), width, precision, 10);
+			break;
+		case 'u':
+			// TODO: Change to length specified type!
+			putu(va_arg(args, size_t), width, precision, 10);
+			break;
+		// TODO: Support lower hexadecimal!
+		case 'o':
+			putu(va_arg(args, size_t), width, precision, 8);
+			break;
+		case 'x':
+		case 'X':
+			// TODO: Change to length specified type!
+			putu(va_arg(args, size_t), width, precision, 16);
+			break;
 		default:
-			console_write('%');
+			putc('%');
 			break;
 		}
 		fmt++;

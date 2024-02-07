@@ -53,7 +53,7 @@ uint16_t disk_read(disk_t self, uint32_t address, uint16_t sectors, void *buffer
 		return (regs.eflags & x86_FLAGS_CARRY) ? 0x00 : sectors;
 	}
 	size_t read = 0;
-	for (size_t retry = 0; read < sectors && retry < 5; read++) {
+	for (size_t retry = 0; read < sectors && retry < 5;) {
 
 		uint16_t cylinder = (address + read) / self.sectors / self.heads;
 		uint8_t head = (address + read) / self.sectors % self.heads;

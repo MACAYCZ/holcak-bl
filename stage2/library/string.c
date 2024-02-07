@@ -1,3 +1,4 @@
+#include <stage2/library/ctype.h>
 #include "string.h"
 
 char *strcpy(char *restrict dst, const char *restrict src) {
@@ -16,6 +17,40 @@ size_t strnlen_s(const char *str, size_t size)
 	size_t i;
 	for (i = 0; str[i] && i < size; i++);
 	return i;
+}
+
+void strrev(char *str)
+{
+	strnrev_s(str, strlen(str));
+}
+
+void strnrev_s(char *str, size_t size)
+{
+	for (size_t i = 0; i <= size / 2; i++) {
+		char value = str[i];
+		str[i] = str[size-i];
+		str[size-i] = value;
+	}
+}
+
+void strfi(char *buffer, ssize_t value, size_t base)
+{
+	if (value < 0) {
+		*buffer++ = '-';
+		value = -value;
+	}
+	strfu(buffer, value, base);
+}
+
+void strfu(char *buffer, size_t value, size_t base)
+{
+	size_t size;
+	for (size = 0; !size || (value /= base); size++) {
+		size_t reminder = value % base;
+		buffer[size] = reminder + (reminder <= 9 ? '0' : 'A' - 10);
+	}
+	buffer[size] = '\0';
+	strnrev_s(buffer, size-1);
 }
 
 void *memset(void *dst, int chr, size_t size) {

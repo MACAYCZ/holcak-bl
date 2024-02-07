@@ -9,15 +9,31 @@
 #include <stage2/global.h>
 #include <stdnoreturn.h>
 
+typedef struct {
+	struct {
+		disk_t disk;
+	} items[16];
+	size_t size;
+	size_t cursor;
+	size_t render;
+} menu_t;
+
 __cdecl noreturn void main(void)
 {
 	console_init();
-	puts("Hello, World!\n");
+//	static menu_t menu;
 
-//	printf("Hello, %4.*s!\n", 5, "World");
-//	while (1);
+	/*
+	printf("String %10.*s\n", 5, "World");
+	printf("Dec    %10.5d\n", 1234);
+	printf("Hex    %10.5x\n", 0x1234);
+	printf("Oct    %10.5o\n", 01234);
+	printf("Zero   %10.0d\n", 0);
+	printf("Zero   %10.1d\n", 0);
+	while (1);
+	*/
 
-/*
+	/*
 	while (1) {
 		switch (port8_in(0x60)) {
 		case 0xE0:
@@ -35,16 +51,16 @@ __cdecl noreturn void main(void)
 			break;
 		}
 	}
-*/
+	*/
 
 	disk_t disk;
-	if (!disk_init(&disk, 0x80)) {
-		puts("ERROR: Could not initialize disk!");
+	if (!disk_init(&disk, 0x00)) {
+		printf("ERROR: Could not initialize disk!");
 		while (1);
 	}
 
 	if (!chainload_init(disk)) {
-		puts("ERROR: Could not chainload!");
+		printf("ERROR: Could not chainload!");
 		while (1);
 	}
 
