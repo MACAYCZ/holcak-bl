@@ -13,9 +13,9 @@ User interface for selecting boot device.
     - [X] [Changing cursor position](https://wiki.osdev.org/Text_Mode_Cursor#Moving_the_Cursor_2)
     - [X] Printing character on the screen
     - [X] Basic [printf](https://cplusplus.com/reference/cstdio/printf/) implementation
-- [ ] Selection menu for all bootable devices
-    - [ ] Keyboard driver
-    - [ ] Render all bootable devices
+- [X] Selection menu for all bootable devices
+    - [X] Keyboard driver
+    - [X] Render all bootable devices
 - [X] Read volume label from the [BPB](https://en.wikipedia.org/wiki/BIOS_parameter_block#DOS_4.0_EBPB)
 
 ### Fixed
@@ -26,7 +26,7 @@ User interface for selecting boot device.
 
 ### Changed
 - [X] Renamed `chainload_load` to `chainload_init` to be more consistent
-- [X] Joined input and output registers together in the `x86_16_int` function
+- [X] Merged input and output registers together in the `x86_16_int` function
 
 ## [0.1.1] - 2024-01-15
 Patch for the previous minor version.
