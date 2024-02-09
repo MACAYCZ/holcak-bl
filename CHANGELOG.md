@@ -3,6 +3,17 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2024-02-09
+Patch for the previous minor version.
+
+### Fixed
+- [X] Fixed bug in `console_cursor_show` which caused weird cursor placement on real hardware
+- [X] Fixed bug where keys weren't registered as pressed by the menu
+- [X] Fixed bug where I wasn't clearing the `.bss` section which caused triple fault
+
+### Changed
+- [X] Moved `s2u` to `strtu` and added signed version `strti`
+
 ## [0.2.0] - 2024-02-07
 User interface for selecting boot device.
 

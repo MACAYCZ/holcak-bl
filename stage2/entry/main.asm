@@ -26,7 +26,6 @@ _start.next:
 	// Initialize registers
 	cli
 	cld
-
 	mov ax, 0x20
 	mov ds, ax
 	mov ss, ax
@@ -35,8 +34,8 @@ _start.next:
 	mov gs, ax
 
 	// Zero out bss section
-	mov edi, __bss_start
-	mov ecx, __bss_end
+	mov edi, offset __bss_start
+	mov ecx, offset __bss_end
 	sub ecx, edi
 	xor al, al
 	rep stosb

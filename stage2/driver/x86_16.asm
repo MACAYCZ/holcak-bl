@@ -33,7 +33,6 @@ x86_16_int:
 
 x86_16_int.real:
 	.code16
-
 	mov eax, cr0
 	and al, 0xFE
 	mov cr0, eax

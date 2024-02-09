@@ -65,7 +65,7 @@ void console_cursor_show(uint8_t shape)
 	port8_out(0x03D5, (port8_in(0x03D5) & 0xC0) | (shape >> 0x04));
 
 	port8_out(0x03D4, 0x0B);
-	port8_out(0x03D5, (port8_in(0x03D5) & 0xE0) | (shape & 0xFF));
+	port8_out(0x03D5, (port8_in(0x03D5) & 0xE0) | (shape & 0x0F));
 }
 
 void console_cursor_hide(void)

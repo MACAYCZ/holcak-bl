@@ -17,7 +17,6 @@ chainload_jump:
 
 chainload_jump.real:
 	.code16
-
 	mov eax, cr0
 	and al, 0xFE
 	mov cr0, eax

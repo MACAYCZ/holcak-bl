@@ -11,6 +11,8 @@ void strnrev_s(char *str, size_t size);
 
 void strfi(char *buffer, ssize_t value, size_t base);
 void strfu(char *buffer, size_t value, size_t base);
+ssize_t strti(const char **buffer, size_t base);
+size_t strtu(const char **buffer, size_t base);
 
 void *memset(void *dst, int chr, size_t size);
 void *memcpy(void *restrict dst, const void *restrict src, size_t size);

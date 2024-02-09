@@ -53,6 +53,28 @@ void strfu(char *buffer, size_t value, size_t base)
 	strnrev_s(buffer, size-1);
 }
 
+ssize_t strti(const char **buffer, size_t base)
+{
+	if (**buffer == '-') {
+		(*buffer)++;
+		return -strtu(buffer, base);
+	}
+	return strtu(buffer, base);
+}
+
+size_t strtu(const char **buffer, size_t base)
+{
+	size_t result = 0;
+	for (size_t value; (value = **buffer); (*buffer)++) {
+		if (isdigit(value)) value -= '0';
+		else if (islower(tolower(value))) value -= 'a' - 0x10;
+		else break;
+		if (value >= base) break;
+		result = result * base + value;
+	}
+	return result;
+}
+
 void *memset(void *dst, int chr, size_t size) {
 	for (size_t i = 0; i < size; i++) {
 		((char*)dst)[i] = chr;

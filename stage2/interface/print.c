@@ -7,16 +7,6 @@
 
 #define putc(Value) console_write(Value)
 
-// TODO: Add to standard headers: https://en.cppreference.com/w/c/string/byte/strtoimax
-static size_t s2u(const char **str)
-{
-	size_t result = 0;
-	while (isdigit(**str)) {
-		result = result * 10 + *(*str)++ - '0';
-	}
-	return result;
-}
-
 static void puts(const char *str, size_t width, size_t precision)
 {
 	size_t size = strnlen_s(str, precision);
@@ -85,7 +75,7 @@ void vprintf(const char *fmt, va_list args)
 			fmt++;
 			break;
 		default:
-			if (isdigit(*fmt)) width = s2u(&fmt);
+			if (isdigit(*fmt)) width = strtu(&fmt, 10);
 			break;
 		}
 		size_t precision = SIZE_MAX;
@@ -96,7 +86,7 @@ void vprintf(const char *fmt, va_list args)
 				fmt++;
 				break;
 			default:
-				if (isdigit(*fmt)) precision = s2u(&fmt);
+				if (isdigit(*fmt)) precision = strtu(&fmt, 10);
 				break;
 			}
 		}
@@ -116,10 +106,10 @@ void vprintf(const char *fmt, va_list args)
 			// TODO: Change to length specified type!
 			putu(va_arg(args, size_t), width, precision, 10);
 			break;
-		// TODO: Support lower hexadecimal!
 		case 'o':
 			putu(va_arg(args, size_t), width, precision, 8);
 			break;
+		// TODO: Support lower hexadecimal!
 		case 'x':
 		case 'X':
 			// TODO: Change to length specified type!
