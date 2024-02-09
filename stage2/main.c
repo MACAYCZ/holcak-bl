@@ -46,10 +46,10 @@ __cdecl noreturn void main(__maybe_unused uint8_t boot)
 		printf("ERROR: Could not find any bootable device!\n");
 		while (1);
 	}
-//	if (menu.size == 1) {
-//		chainload_init(menu.items[0].disk);
-//		chainload_jump(menu.items[0].disk.id);
-//	}
+	if (menu.size == 1) {
+		chainload_init(menu.items[0].disk);
+		chainload_jump(menu.items[0].disk.id);
+	}
 
 	while (1) {
 		console_clear();
